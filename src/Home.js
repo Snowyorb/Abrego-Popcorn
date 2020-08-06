@@ -90,6 +90,7 @@ export default class Home extends Component {
           </Form>
         </Dimmer>
         <div className="home-display" id="homeBody">
+        <title>Popcorn - Home</title>
           <BodyClassName className="home-page" />
           <header>
             <h1 className="popcorn" id="t">

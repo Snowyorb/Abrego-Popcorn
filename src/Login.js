@@ -7,6 +7,7 @@ export default class Login extends Component {
   render() {
     return (
       <div>
+        <title>Popcorn - Login</title>
         <BodyClassName className="login-page" />
         <h1 id="head1" className="popcorn">
           Popcorn

@@ -8,6 +8,7 @@ export default class Register extends Component {
     render() {
         return(
             <div>
+              <title>Popcorn - Register</title>
               <BodyClassName className="register-page" />
         <h1 id="head2" className="popcorn">
           Popcorn
