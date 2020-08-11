@@ -35,13 +35,13 @@ export default class Login extends Component {
       event.preventDefault();
 
       const user = new CognitoUser({
-        Username: this.state.username,
+        Email: this.state.username,
         Pool: UserPool,
       });
 
       const authDetails = new AuthenticationDetails({
-        Username: this.state.username,
-        Pass: this.state.pass,
+        Email: this.state.username,
+        Password: this.state.pass,
       });
 
       user.authenticateUser(authDetails, {
