@@ -70,11 +70,11 @@ export default class Register extends Component {
             <br />
             <input type="hidden" name="password" />
             <br />
-            <h3 className="pink-title">- Confirm Password -</h3>
+            {/* <h3 className="pink-title">- Confirm Password -</h3>
 
             <input class="login-bar" type="password"></input>
 
-            <br />
+            <br /> */}
             <input type="hidden" name="password" />
             <br />
             <input class="sbtn" type="submit" value="Create an Account"></input>
