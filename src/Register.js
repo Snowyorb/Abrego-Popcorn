@@ -54,6 +54,7 @@ export default class Register extends Component {
             <input
               class="login-bar"
               onChange={this.addUsername}
+              value={this.state.username}
               type="text"
             ></input>
 
@@ -65,6 +66,7 @@ export default class Register extends Component {
               class="login-bar"
               type="password"
               onChange={this.addPass}
+              value={this.state.pass}
             ></input>
 
             <br />
