@@ -2,14 +2,15 @@ import React, { Component, useState } from "react";
 import "./App.css";
 import { Link } from "react-router-dom";
 import BodyClassName from "react-body-classname";
-import { CognitoUserPool } from "amazon-cognito-identity-js";
+import UserPool from './userAWS'; 
 
 export default class Register extends Component {
   constructor(props) {
     super(props);
-    this.state = { username: "", pass: "" };
+    this.state = { username: "", pass: "", Cpass: "" };
     this.addUsername = this.addUsername.bind(this);
     this.addPass = this.addPass.bind(this);
+    this.confirmPass = this.confirmPass.bind(this); 
   }
 
   addUsername(event) {
@@ -20,22 +21,18 @@ export default class Register extends Component {
     this.setState({ pass: event.target.value });
   }
 
+  confirmPass(event) {
+    this.setState({ Cpass: event.target.value });
+  }
+
   render() {
-    // const [username, setUsername] = useState('');
-    // const [pass, setPass] = useState('');
-
-    const poolData = {
-      UserPoolId: "us-east-2_G6K8cPQRA",
-      ClientId: "12dbcjovhj2bjnkfn8rscjq73j",
-    };
-
-    const UserPool = new CognitoUserPool(poolData);
 
     const onSubmit = (event) => {
       event.preventDefault();
 
       UserPool.signUp(this.state.username, this.state.pass, [], null, (err, data) => {
         if (err) console.error(err);
+        
         console.log(data);
       });
     };
@@ -51,7 +48,7 @@ export default class Register extends Component {
 
         <div className="login-form">
           <form onSubmit={onSubmit}>
-            <h3 className="pink-title">- Username -</h3>
+            <h3 className="pink-title">- Email -</h3>
 
             <input
               class="login-bar"
@@ -74,11 +71,12 @@ export default class Register extends Component {
             <br />
             <input type="hidden" name="password" />
             <br />
-            {/* <h3 className="pink-title">- Confirm Password -</h3>
+            <h3 className="pink-title">- Confirm Password -</h3>
 
-            <input class="login-bar" type="password"></input>
+            {/* <input class="login-bar" type="password" onChange={this.confirmPass}
+              value={this.state.Cpass}></input> */}
 
-            <br /> */}
+            <br />
             <input type="hidden" name="password" />
             <br />
             <input class="sbtn" type="submit" value="Create an Account"></input>
