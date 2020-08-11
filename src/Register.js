@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import "./App.css";
 import { Link } from "react-router-dom";
 import BodyClassName from "react-body-classname";
@@ -71,7 +71,7 @@ export default class Register extends Component {
             <br />
             <input type="hidden" name="password" />
             <br />
-            <h3 className="pink-title">- Confirm Password -</h3>
+            {/* <h3 className="pink-title">- Confirm Password -</h3> */}
 
             {/* <input class="login-bar" type="password" onChange={this.confirmPass}
               value={this.state.Cpass}></input> */}

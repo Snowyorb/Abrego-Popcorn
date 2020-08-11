@@ -1,8 +1,9 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import "./App.css";
 import { Link } from "react-router-dom";
 import BodyClassName from "react-body-classname";
 import UserPool from './userAWS'; 
+import {AccountContext} from './Accounts'; 
 import {
   CognitoUserPool,
   CognitoUser,
@@ -12,10 +13,11 @@ import {
 export default class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = { username: "", pass: "", Cpass: "" };
+    this.state = { username: "", pass: "", Cpass: "", messageShow: "none" };
     this.addUsername = this.addUsername.bind(this);
     this.addPass = this.addPass.bind(this);
     this.confirmPass = this.confirmPass.bind(this);
+    this.authenticate = useContext(AccountContext);
   }
 
   addUsername(event) {
@@ -30,32 +32,28 @@ export default class Login extends Component {
     this.setState({ Cpass: event.target.value });
   }
 
+  showMessage() {
+    this.setState({ messageShow: "" });
+  }
+
+  hideMessage(){
+    this.setState({ messageShow: "none" });
+  }
+
   render() {
     const onSubmit = (event) => {
       event.preventDefault();
 
-      const user = new CognitoUser({
-        Username: this.state.username,
-        Pool: UserPool,
-      });
-
-      const authDetails = new AuthenticationDetails({
-        Username: this.state.username,
-        Password: this.state.pass,
-      });
-
-      user.authenticateUser(authDetails, {
-        onSuccess: data => {
-          console.log("Sucess!", data);
-        },
-        onFailure: err => {
-          console.log('onFailure:', err); 
-        },
-
-        newPasswordRequired: data =>{
-          console.log('newPasswordRequired:', data); 
-        }
-      }); 
+      this.authenticate(this.state.username, this.state.pass)
+        .then(data => {
+          console.log('LOgged IN', data); 
+          this.hideMessage();
+        })
+        .catch(err => {
+          console.log('Failed to Login!', err)
+          this.showMessage();
+        })
+     
     };
 
     return (
@@ -70,7 +68,8 @@ export default class Login extends Component {
 
         <div className="login-form">
           <form onSubmit={onSubmit}>
-            <h3 className="pink-title">- Username -</h3>
+            <h4 style={{color: 'red', fontSize: 20, display: this.state.messageShow}}>Password or Username was incorrect!</h4>
+            <h3 className="pink-title">- Email -</h3>
 
             <input
               class="login-bar"
@@ -82,7 +81,6 @@ export default class Login extends Component {
             <br />
             <br />
             <h3 className="pink-title">- Password -</h3>
-
             <input
               class="login-bar"
               type="password"
