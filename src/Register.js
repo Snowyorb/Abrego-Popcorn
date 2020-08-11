@@ -1,51 +1,71 @@
-import React, {Component, useState} from 'react';
-import './App.css';
+import React, { Component, useState } from "react";
+import "./App.css";
 import { Link } from "react-router-dom";
-import BodyClassName from 'react-body-classname';
-import {CognitoUserPool} from 'amazon-cognito-identity-js';
+import BodyClassName from "react-body-classname";
+import { CognitoUserPool } from "amazon-cognito-identity-js";
 
 export default class Register extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { username: "", pass: "" };
+  }
+
+  addUsername(event) {
+    this.setState({ username: event.target.value });
+  }
+
+  addPass(event) {
+    this.setState({ pass: event.target.value });
+  }
+
   render() {
+    // const [username, setUsername] = useState('');
+    // const [pass, setPass] = useState('');
 
-      const [username, setUsername] = useState('');
-      const [pass, setPass] = useState(''); 
+    const poolData = {
+      UserPoolId: "us-east-2_aRcpJEIUd",
+      ClientId: "127aet6koopk3mu71uvkp4ag1i",
+    };
 
-      const poolData = {
-        UserPoolId: 'us-east-2_aRcpJEIUd',
-        ClientId: '127aet6koopk3mu71uvkp4ag1i'
-      };
+    const UserPool = new CognitoUserPool(poolData);
 
-      const UserPool = new CognitoUserPool(poolData);
+    const onSubmit = (event) => {
+      event.preventDefault();
 
-      const onSubmit = event => {
-        event.preventDefault();
-
-        UserPool.signUp(username, pass, [], null, (err, data) => {
-          if(err)console.error(err);
-          console.log(data)
-        })
-      }
-        return(
-            <div>
-              <title>Popcorn - Register</title>
-              <BodyClassName className="register-page" />
+      UserPool.signUp(this.state.username, this.state.pass, [], null, (err, data) => {
+        if (err) console.error(err);
+        console.log(data);
+      });
+    };
+    return (
+      <div>
+        <title>Popcorn - Register</title>
+        <BodyClassName className="register-page" />
         <h1 id="head2" className="popcorn">
           Popcorn
         </h1>
-        
+
         <h2 className="under-title">Register</h2>
-      
+
         <div className="login-form">
           <form onSubmit={onSubmit}>
             <h3 className="pink-title">- Username -</h3>
 
-            <input class="login-bar" onChange={event => setUsername(event.target.value)} type="text" required></input>
+            <input
+              class="login-bar"
+              onChange={this.addUsername}
+              type="text"
+            ></input>
 
             <br />
             <br />
             <h3 className="pink-title">- Password -</h3>
 
-            <input class="login-bar" type="password" onChange={event => setPass(event.target.value)} required ></input>
+            <input
+              class="login-bar"
+              type="password"
+              onChange={this.addPass}
+            ></input>
 
             <br />
             <input type="hidden" name="password" />
@@ -67,8 +87,7 @@ export default class Register extends Component {
             </Link>
           </div>
         </div>
-        
       </div>
-        )
-    }
+    );
+  }
 }
