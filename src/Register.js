@@ -25,8 +25,8 @@ export default class Register extends Component {
     // const [pass, setPass] = useState('');
 
     const poolData = {
-      UserPoolId: "us-east-2_db6feWGYu",
-      ClientId: "384cqe34udikficrko5in6s93r",
+      UserPoolId: "us-east-2_G6K8cPQRA",
+      ClientId: "12dbcjovhj2bjnkfn8rscjq73j",
     };
 
     const UserPool = new CognitoUserPool(poolData);
