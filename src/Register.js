@@ -66,7 +66,6 @@ export default class Register extends Component {
               <a className="url-link">Have an Account? Login!</a>
             </Link>
           </div>
-          
         </div>
         
       </div>
