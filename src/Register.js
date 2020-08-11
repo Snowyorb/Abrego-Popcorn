@@ -47,7 +47,14 @@ export default class Register extends Component {
               <a className="url-link">Have an Account? Login!</a>
             </Link>
           </div>
+          <script src="js/vendor/jquery-3.1.0.js"></script>
+        <script src="js/vendor/bootstrap.min.js"></script>
+        <script src="js/vendor/aws-cognito-sdk.min.js"></script>
+        <script src="js/vendor/amazon-cognito-identity.min.js"></script>
+        <script src="js/config.js"></script>
+        <script src="js/cognito-auth.js"></script>
         </div>
+        
       </div>
         )
     }
