@@ -8,6 +8,8 @@ export default class Register extends Component {
   constructor(props) {
     super(props);
     this.state = { username: "", pass: "" };
+    this.addUsername = this.addUsername.bind(this);
+    this.addPass = this.addPass.bind(this);
   }
 
   addUsername(event) {
