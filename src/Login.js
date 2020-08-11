@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import { Link } from "react-router-dom";
 import BodyClassName from "react-body-classname";
+import UserPool from './userAWS'; 
 import {
   CognitoUserPool,
   CognitoUser,
@@ -34,13 +35,13 @@ export default class Login extends Component {
       event.preventDefault();
 
       const user = new CognitoUser({
-        Username: username,
+        Username: this.state.username,
         Pool: UserPool,
       });
 
       const authDetails = new AuthenticationDetails({
-        Username: username,
-        Pass: pass,
+        Username: this.state.username,
+        Pass: this.state.pass,
       });
 
       user.authenticateUser(authDetails, {
