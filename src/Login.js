@@ -97,7 +97,7 @@ export default class Login extends Component {
             >
               Password or Username was incorrect!
             </h4>
-            <h3 className="pink-title">- Username -</h3>
+            <h3 className="pink-title">- Email -</h3>
 
             <input
               class="login-bar"
