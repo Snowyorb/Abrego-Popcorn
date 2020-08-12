@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import "./App.css";
-import { Link } from "react-router-dom";
+
+import { Link, Redirect } from "react-router-dom";
 import BodyClassName from "react-body-classname";
-import UserPool from './userAWS'; 
+import UserPool from "./userAWS";
+
+
 import {
   CognitoUserPool,
   CognitoUser,
@@ -12,10 +15,18 @@ import {
 export default class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = { username: "", pass: "", Cpass: "" };
+    this.state = { username: "", pass: "", Cpass: "", messageShow: "none", toHome: false };
     this.addUsername = this.addUsername.bind(this);
     this.addPass = this.addPass.bind(this);
     this.confirmPass = this.confirmPass.bind(this);
+  }
+
+  showMessage() {
+    this.setState({ messageShow: "" });
+  }
+
+  hideMessage() {
+    this.setState({ messageShow: "none" });
   }
 
   addUsername(event) {
@@ -31,6 +42,10 @@ export default class Login extends Component {
   }
 
   render() {
+    if (this.state.toHome) {
+      return <Redirect to='/home' />
+    }
+
     const onSubmit = (event) => {
       event.preventDefault();
 
@@ -45,17 +60,20 @@ export default class Login extends Component {
       });
 
       user.authenticateUser(authDetails, {
-        onSuccess: data => {
+        onSuccess: (data) => {
           console.log("Sucess!", data);
+          this.hideMessage();
+          this.setState({ toHome: true });
         },
-        onFailure: err => {
-          console.log('onFailure:', err); 
+        onFailure: (err) => {
+          console.log("onFailure:", err);
+          this.showMessage(); 
         },
 
-        newPasswordRequired: data =>{
-          console.log('newPasswordRequired:', data); 
-        }
-      }); 
+        newPasswordRequired: (data) => {
+          console.log("newPasswordRequired:", data);
+        },
+      });
     };
 
     return (
@@ -70,6 +88,15 @@ export default class Login extends Component {
 
         <div className="login-form">
           <form onSubmit={onSubmit}>
+            <h4
+              style={{
+                color: "red",
+                fontSize: 20,
+                display: this.state.messageShow,
+              }}
+            >
+              Password or Username was incorrect!
+            </h4>
             <h3 className="pink-title">- Username -</h3>
 
             <input
