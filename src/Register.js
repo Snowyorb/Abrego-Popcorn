@@ -41,7 +41,7 @@ export default class Register extends Component {
 
     const onSubmit = (event) => {
       event.preventDefault();
-
+      
       UserPool.signUp(
         this.state.username,
         this.state.pass,
@@ -57,6 +57,7 @@ export default class Register extends Component {
         }
       );
     };
+
     return (
       <div>
         <title>Popcorn - Register</title>
