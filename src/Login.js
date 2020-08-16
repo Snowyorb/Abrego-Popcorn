@@ -10,6 +10,8 @@ import {
   AuthenticationDetails,
 } from "amazon-cognito-identity-js";
 
+
+
 export default class Login extends Component {
   constructor(props) {
     super(props);
@@ -17,8 +19,10 @@ export default class Login extends Component {
     this.addUsername = this.addUsername.bind(this);
     this.addPass = this.addPass.bind(this);
     this.confirmPass = this.confirmPass.bind(this);
-    this.authenticate = useContext(AccountContext);
+
   }
+
+ 
 
   addUsername(event) {
     this.setState({ username: event.target.value });
@@ -41,10 +45,10 @@ export default class Login extends Component {
   }
 
   render() {
-    const onSubmit = (event) => {
-      event.preventDefault();
 
-      this.authenticate(this.state.username, this.state.pass)
+
+    const onSubmit = (event) => {
+      AccountContext(this.state.username, this.state.pass)
         .then(data => {
           console.log('LOgged IN', data); 
           this.hideMessage();

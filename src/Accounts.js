@@ -11,13 +11,13 @@ const Account = (props) => {
   const authenticate = async (Username, Password) => {
    await new Promise((resolve, reject) => {
     const user = new CognitoUser({
-        Username: this.state.username,
-        Pool: UserPool,
+        Username,
+        UserPool,
       });
   
       const authDetails = new AuthenticationDetails({
-        Username: this.state.username,
-        Password: this.state.pass,
+        Username,
+        Password,
       });
   
       user.authenticateUser(authDetails, {
