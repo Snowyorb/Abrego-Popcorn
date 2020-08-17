@@ -2,16 +2,16 @@ import React from "react";
 import Login from "./Login";
 import Home from "./Home";
 import Register from "./Register";
-import { Account, AccountContext } from "./Accounts";
+import { Account} from "./Accounts";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "semantic-ui-css/semantic.min.css";
-import { CognitoUserPool } from "amazon-cognito-identity-js";
 
 import "./App.css";
 
 const App = () => {
   return (
     <Account>
+      <title>Popcorn</title>
       <Router>
         <Switch>
           <Route exact path="/">

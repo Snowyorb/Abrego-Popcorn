@@ -2,15 +2,13 @@ import React, { Component, useContext } from "react";
 import "./App.css";
 import { Link } from "react-router-dom";
 import BodyClassName from "react-body-classname";
-import UserPool from './userAWS'; 
 import {AccountContext} from './Accounts'; 
-import {
-  CognitoUserPool,
-  CognitoUser,
-  AuthenticationDetails,
-} from "amazon-cognito-identity-js";
 
-
+const MyComponent = () => {
+  const authenticate = useContext(AccountContext);
+  console.log(authenticate + "!!!!"); 
+  return authenticate; 
+}
 
 export default class Login extends Component {
   constructor(props) {
@@ -36,6 +34,7 @@ export default class Login extends Component {
 
   showMessage() {
     this.setState({ messageShow: "" });
+    console.log(MyComponent + "!!!!"); 
   }
 
   hideMessage(){
@@ -45,11 +44,7 @@ export default class Login extends Component {
   
   render() {
     
-    const MyComponent = () => {
-      const authenticate = useContext(AccountContext);
-      return authenticate; 
-    }
-
+  
     const onSubmit = (event) => {
       MyComponent(this.state.username, this.state.pass)
         .then(data => {
