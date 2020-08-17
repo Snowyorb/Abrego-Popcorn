@@ -22,8 +22,6 @@ export default class Login extends Component {
 
   }
 
- 
-
   addUsername(event) {
     this.setState({ username: event.target.value });
   }
@@ -44,11 +42,16 @@ export default class Login extends Component {
     this.setState({ messageShow: "none" });
   }
 
+  
   render() {
-
+    
+    const MyComponent = () => {
+      const authenticate = useContext(AccountContext);
+      return authenticate; 
+    }
 
     const onSubmit = (event) => {
-      AccountContext(this.state.username, this.state.pass)
+      MyComponent(this.state.username, this.state.pass)
         .then(data => {
           console.log('LOgged IN', data); 
           this.hideMessage();
@@ -76,7 +79,7 @@ export default class Login extends Component {
             <h3 className="pink-title">- Email -</h3>
 
             <input
-              class="login-bar"
+              className="login-bar"
               type="text"
               onChange={this.addUsername}
               value={this.state.username}
@@ -86,7 +89,7 @@ export default class Login extends Component {
             <br />
             <h3 className="pink-title">- Password -</h3>
             <input
-              class="login-bar"
+              className="login-bar"
               type="password"
               onChange={this.addPass}
               value={this.state.pass}
@@ -95,7 +98,7 @@ export default class Login extends Component {
             <br />
             <input type="hidden" name="password" />
             <br />
-            <input class="sbtn" type="submit" value="Log In"></input>
+            <input className="sbtn" type="submit" value="Log In"></input>
           </form>
 
           <br />
