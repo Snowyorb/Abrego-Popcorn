@@ -1,16 +1,25 @@
 import React, { Component } from "react";
 import "./App.css";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import BodyClassName from "react-body-classname";
-import UserPool from './userAWS'; 
+import UserPool from "./userAWS";
 
 export default class Register extends Component {
   constructor(props) {
     super(props);
-    this.state = { username: "", pass: "", Cpass: "" };
+    this.state = { username: "", pass: "", Cpass: "", messageShow: "none", toHome: false };
     this.addUsername = this.addUsername.bind(this);
     this.addPass = this.addPass.bind(this);
-    this.confirmPass = this.confirmPass.bind(this); 
+    this.confirmPass = this.confirmPass.bind(this);
+    this.showMessage = this.showMessage.bind(this)
+  }
+
+  showMessage() {
+    this.setState({ messageShow: "" });
+  }
+
+  hideMessage() {
+    this.setState({ messageShow: "none" });
   }
 
   addUsername(event) {
@@ -26,16 +35,29 @@ export default class Register extends Component {
   }
 
   render() {
+    if (this.state.toHome) {
+      return <Redirect to='/' />
+    }
 
     const onSubmit = (event) => {
       event.preventDefault();
-
-      UserPool.signUp(this.state.username, this.state.pass, [], null, (err, data) => {
-        if (err) console.error(err);
-        
-        console.log(data);
-      });
+      
+      UserPool.signUp(
+        this.state.username,
+        this.state.pass,
+        [],
+        null,
+        (err, data) => {
+          if (err) {
+            console.error(err)
+            this.showMessage();
+          }
+          else {this.hideMessage(); this.setState({ toHome: true });}
+          console.log(data);
+        }
+      );
     };
+
     return (
       <div>
         <title>Popcorn - Register</title>
@@ -48,6 +70,15 @@ export default class Register extends Component {
 
         <div className="login-form">
           <form onSubmit={onSubmit}>
+          <h4
+              style={{
+                color: "red",
+                fontSize: 20,
+                display: this.state.messageShow,
+              }}
+            >
+              Password and Email must be more then 6 characters long
+            </h4>
             <h3 className="pink-title">- Email -</h3>
 
             <input

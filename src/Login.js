@@ -1,23 +1,33 @@
 import React, { Component, useContext } from "react";
 import "./App.css";
-import { Link } from "react-router-dom";
-import BodyClassName from "react-body-classname";
-import {AccountContext} from './Accounts'; 
 
-const MyComponent = () => {
-  const authenticate = useContext(AccountContext);
-  console.log(authenticate + "!!!!"); 
-  return authenticate; 
-}
+import { Link, Redirect } from "react-router-dom";
+import BodyClassName from "react-body-classname";
+import UserPool from "./userAWS";
+
+
+import {
+  CognitoUserPool,
+  CognitoUser,
+  AuthenticationDetails,
+} from "amazon-cognito-identity-js";
 
 export default class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = { username: "", pass: "", Cpass: "", messageShow: "none" };
+    this.state = { username: "", pass: "", Cpass: "", messageShow: "none", toHome: false };
     this.addUsername = this.addUsername.bind(this);
     this.addPass = this.addPass.bind(this);
     this.confirmPass = this.confirmPass.bind(this);
 
+  }
+
+  showMessage() {
+    this.setState({ messageShow: "" });
+  }
+
+  hideMessage() {
+    this.setState({ messageShow: "none" });
   }
 
   addUsername(event) {
@@ -43,19 +53,38 @@ export default class Login extends Component {
 
   
   render() {
-    
-  
+    if (this.state.toHome) {
+      return <Redirect to='/home' />
+    }
+
     const onSubmit = (event) => {
-      MyComponent(this.state.username, this.state.pass)
-        .then(data => {
-          console.log('LOgged IN', data); 
+      event.preventDefault();
+
+      const user = new CognitoUser({
+        Username: this.state.username,
+        Pool: UserPool,
+      });
+
+      const authDetails = new AuthenticationDetails({
+        Username: this.state.username,
+        Password: this.state.pass,
+      });
+
+      user.authenticateUser(authDetails, {
+        onSuccess: (data) => {
+          console.log("Sucess!", data);
           this.hideMessage();
-        })
-        .catch(err => {
-          console.log('Failed to Login!', err)
-          this.showMessage();
-        })
-     
+          this.setState({ toHome: true });
+        },
+        onFailure: (err) => {
+          console.log("onFailure:", err);
+          this.showMessage(); 
+        },
+
+        newPasswordRequired: (data) => {
+          console.log("newPasswordRequired:", data);
+        },
+      });
     };
 
     return (
@@ -70,7 +99,15 @@ export default class Login extends Component {
 
         <div className="login-form">
           <form onSubmit={onSubmit}>
-            <h4 style={{color: 'red', fontSize: 20, display: this.state.messageShow}}>Password or Username was incorrect!</h4>
+            <h4
+              style={{
+                color: "red",
+                fontSize: 20,
+                display: this.state.messageShow,
+              }}
+            >
+              Password or Username was incorrect!
+            </h4>
             <h3 className="pink-title">- Email -</h3>
 
             <input
