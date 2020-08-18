@@ -23,7 +23,8 @@ const cookies = new Cookies();
 
 export default class Home extends Component {
   state = {
-    testUser: cookies.get('userN')
+    testUser: cookies.get('userN'),
+    currentUser: cookies.get('userN')
   };
   
   componentDidMount = () =>{
