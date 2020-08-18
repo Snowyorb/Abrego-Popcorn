@@ -15,7 +15,7 @@ import {
 export default class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = { username: "", pass: "", Cpass: "", messageShow: "none", toHome: false, cookies: "", setName: "" };
+    this.state = { username: "", pass: "", Cpass: "", messageShow: "none", toHome: false, setName: "" };
     this.addUsername = this.addUsername.bind(this);
     this.addPass = this.addPass.bind(this);
     this.confirmPass = this.confirmPass.bind(this);
