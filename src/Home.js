@@ -111,9 +111,6 @@ export default class Home extends Component {
                 class="ui grid middle aligned"
                 id="gridBoi"
               >
-                {/* <h2 id="ut" className="under-title">
-          -Collection-
-        </h2> */}
                 <Grid.Row>
                   <Grid.Column>
                     <div className="movie">
