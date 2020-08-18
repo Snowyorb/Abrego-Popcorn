@@ -3,6 +3,7 @@ import "./App.css";
 import { Link, Redirect } from "react-router-dom";
 import BodyClassName from "react-body-classname";
 import UserPool from "./userAWS";
+import Cookies from 'universal-cookie';
 
 
 import {
@@ -14,11 +15,18 @@ import {
 export default class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = { username: "", pass: "", Cpass: "", messageShow: "none", toHome: false };
+    this.state = { username: "", pass: "", Cpass: "", messageShow: "none", toHome: false, cookies: "", setName: "" };
     this.addUsername = this.addUsername.bind(this);
     this.addPass = this.addPass.bind(this);
     this.confirmPass = this.confirmPass.bind(this);
+    this.setUserNameCookie = this.setUserNameCookie.bind(this); 
 
+  }
+
+
+  setUserNameCookie = () => {
+    var cookies = new Cookies();
+    cookies.set('userN', this.state.setName, { path: '/home' })
   }
 
   showMessage() {
@@ -43,7 +51,6 @@ export default class Login extends Component {
 
   showMessage() {
     this.setState({ messageShow: "" });
-    console.log(MyComponent + "!!!!"); 
   }
 
   hideMessage(){
@@ -69,10 +76,18 @@ export default class Login extends Component {
         Password: this.state.pass,
       });
 
+
+
+      
+
       user.authenticateUser(authDetails, {
         onSuccess: (data) => {
           console.log("Sucess!", data);
           this.hideMessage();
+          console.log(data);
+          var saveUser = authDetails.username; 
+          this.setState({ setName: saveUser });
+          this.setUserNameCookie(); 
           this.setState({ toHome: true });
         },
         onFailure: (err) => {
@@ -85,6 +100,8 @@ export default class Login extends Component {
         },
       });
     };
+
+    
 
     return (
       <div>

@@ -16,9 +16,23 @@ import {
   TextArea,
 } from "semantic-ui-react";
 import add from "./images/add_icon.jpg";
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
+
 
 export default class Home extends Component {
-  state = {};
+  state = {
+    testUser: cookies.get('userN')
+  };
+  
+  componentDidMount = () =>{
+    console.log(this.state.testUser + "!!!")
+    var name = this.state.testUser.split("@")[0];
+  //   var cookies = new Cookies();
+  //   var name = cookies.get('userN')
+   this.setState({ testUser: name });
+ }
 
   handleShow = () => this.setState({ active: true });
   handleHide = () => this.setState({ active: false });
@@ -97,7 +111,7 @@ export default class Home extends Component {
 
             <Link to="/">
               <a className="navi" id="top" style={{}}>
-                Logout
+                {this.state.testUser}, Logout
               </a>
             </Link>
           </header>
@@ -138,7 +152,7 @@ export default class Home extends Component {
                   </Grid.Column>
                   <Grid.Column>
                     <div className="movie">
-                      <h3 id="title">Series Title</h3>
+                      <h3 id="title">{this.state.testUser}</h3>
                       <div class="container">
                         <img
                           alt=""
