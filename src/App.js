@@ -3,6 +3,7 @@ import Login from './Login';
 import Home from './Home';
 import Register from './Register';
 import { BrowserRouter as Router, Switch, Route,  } from 'react-router-dom';
+import Account from './Accounts'; 
 import 'semantic-ui-css/semantic.min.css';
 import "./App.css";
 

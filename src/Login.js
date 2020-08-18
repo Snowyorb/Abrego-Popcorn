@@ -1,6 +1,5 @@
 import React, { Component, useContext } from "react";
 import "./App.css";
-
 import { Link, Redirect } from "react-router-dom";
 import BodyClassName from "react-body-classname";
 import UserPool from "./userAWS";
