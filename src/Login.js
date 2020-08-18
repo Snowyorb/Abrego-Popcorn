@@ -1,9 +1,9 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import "./App.css";
-
 import { Link, Redirect } from "react-router-dom";
 import BodyClassName from "react-body-classname";
 import UserPool from "./userAWS";
+import Cookies from 'universal-cookie';
 
 
 import {
@@ -15,10 +15,18 @@ import {
 export default class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = { username: "", pass: "", Cpass: "", messageShow: "none", toHome: false };
+    this.state = { username: "", pass: "", Cpass: "", messageShow: "none", toHome: false, cookies: "", setName: "" };
     this.addUsername = this.addUsername.bind(this);
     this.addPass = this.addPass.bind(this);
     this.confirmPass = this.confirmPass.bind(this);
+    this.setUserNameCookie = this.setUserNameCookie.bind(this); 
+
+  }
+
+
+  setUserNameCookie = () => {
+    var cookies = new Cookies();
+    cookies.set('userN', this.state.setName, { path: '/home' })
   }
 
   showMessage() {
@@ -41,6 +49,15 @@ export default class Login extends Component {
     this.setState({ Cpass: event.target.value });
   }
 
+  showMessage() {
+    this.setState({ messageShow: "" });
+  }
+
+  hideMessage(){
+    this.setState({ messageShow: "none" });
+  }
+
+  
   render() {
     if (this.state.toHome) {
       return <Redirect to='/home' />
@@ -59,10 +76,18 @@ export default class Login extends Component {
         Password: this.state.pass,
       });
 
+
+
+      
+
       user.authenticateUser(authDetails, {
         onSuccess: (data) => {
           console.log("Sucess!", data);
           this.hideMessage();
+          console.log(data);
+          var saveUser = authDetails.username; 
+          this.setState({ setName: saveUser });
+          this.setUserNameCookie(); 
           this.setState({ toHome: true });
         },
         onFailure: (err) => {
@@ -75,6 +100,8 @@ export default class Login extends Component {
         },
       });
     };
+
+    
 
     return (
       <div>
@@ -100,7 +127,7 @@ export default class Login extends Component {
             <h3 className="pink-title">- Email -</h3>
 
             <input
-              class="login-bar"
+              className="login-bar"
               type="text"
               onChange={this.addUsername}
               value={this.state.username}
@@ -109,9 +136,8 @@ export default class Login extends Component {
             <br />
             <br />
             <h3 className="pink-title">- Password -</h3>
-
             <input
-              class="login-bar"
+              className="login-bar"
               type="password"
               onChange={this.addPass}
               value={this.state.pass}
@@ -120,7 +146,7 @@ export default class Login extends Component {
             <br />
             <input type="hidden" name="password" />
             <br />
-            <input class="sbtn" type="submit" value="Log In"></input>
+            <input className="sbtn" type="submit" value="Log In"></input>
           </form>
 
           <br />

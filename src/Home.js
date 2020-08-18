@@ -12,15 +12,28 @@ import {
   Dimmer,
   Header,
   Icon,
-  Input,
-  Divider,
   Form,
   TextArea,
 } from "semantic-ui-react";
 import add from "./images/add_icon.jpg";
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
+
 
 export default class Home extends Component {
-  state = {};
+  state = {
+    testUser: cookies.get('userN'),
+    currentUser: cookies.get('userN')
+  };
+  
+  componentDidMount = () =>{
+    console.log(this.state.testUser + "!!!")
+    var name = this.state.testUser.split("@")[0];
+  //   var cookies = new Cookies();
+  //   var name = cookies.get('userN')
+   this.setState({ testUser: name });
+ }
 
   handleShow = () => this.setState({ active: true });
   handleHide = () => this.setState({ active: false });
@@ -99,7 +112,7 @@ export default class Home extends Component {
 
             <Link to="/">
               <a className="navi" id="top" style={{}}>
-                Logout
+                {this.state.testUser}, Logout
               </a>
             </Link>
           </header>
@@ -124,6 +137,7 @@ export default class Home extends Component {
                       <div class="container">
                         <img
                           id="addle"
+                          alt=""
                           class="image"
                           src={add}
                           onClick={this.handleShow}
@@ -136,9 +150,10 @@ export default class Home extends Component {
                   </Grid.Column>
                   <Grid.Column>
                     <div className="movie">
-                      <h3 id="title">Series Title</h3>
+                      <h3 id="title">{this.state.testUser}</h3>
                       <div class="container">
                         <img
+                          alt=""
                           id="pic2"
                           class="image"
                           src="https://image.tmdb.org/t/p/w500/vBaLz8kZNXYvTjHwrTewkTw3l7k.jpg"
@@ -184,6 +199,7 @@ export default class Home extends Component {
                       <div class="container">
                         <img
                           id="pic2"
+                          alt=""
                           class="image"
                           src="https://cdn.flickeringmyth.com/wp-content/uploads/2020/02/The-Letter-for-the-King-poster-600x889.jpg"
                         />
@@ -227,6 +243,7 @@ export default class Home extends Component {
                       <h3 id="title">Series Title</h3>
                       <div class="container">
                         <img
+                          alt=""
                           id="pic2"
                           class="image"
                           src="https://i.redd.it/xwjlz1zljf921.jpg"
@@ -271,6 +288,7 @@ export default class Home extends Component {
                       <h3 id="title">Series Title</h3>
                       <div class="container">
                         <img
+                          alt=""
                           id="pic2"
                           class="image"
                           src="https://www.indiewire.com/wp-content/uploads/2017/09/first-they-killed-my-father.jpg?w=674"
@@ -315,6 +333,7 @@ export default class Home extends Component {
                       <h3 id="title">Series Title</h3>
                       <div class="container">
                         <img
+                          alt=""
                           id="pic2"
                           class="image"
                           src="https://lh3.googleusercontent.com/proxy/mH59Yei7huqczx-Ps70qOJh30sxbRzVvGdrdE73GyzpfoOLBTx6XhXSUiQ0XIoMHSDVDLRpHrk84rhYg6pU2glpNgHLkqcLrSl0VbWEdDKlwee3ka0w5dkXWjppPRZt45sXILoKmZPrBZWzIQA7uDOAXPbZqZXBCkltcJvlo4imJw9YA0AFd0ITPaoUB5w"
