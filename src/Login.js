@@ -20,7 +20,6 @@ export default class Login extends Component {
     this.addPass = this.addPass.bind(this);
     this.confirmPass = this.confirmPass.bind(this);
     this.setUserNameCookie = this.setUserNameCookie.bind(this); 
-
   }
 
 
