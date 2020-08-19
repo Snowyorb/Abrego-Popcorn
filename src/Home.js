@@ -28,14 +28,15 @@ export default class Home extends Component {
       testUser: cookies.get("userN"),
       currentUser: cookies.get("userN"),
       testTitle: "",
+      movies: "HI"
     };
   }
 
   componentDidMount = () => {
     console.log(this.state.testUser + "!!!");
     var name = this.state.testUser;
-    //   var cookies = new Cookies();
-    //   var name = cookies.get('userN')
+    var cookies = new Cookies();
+    var name = cookies.get('userN')
     this.setState({ testUser: name });
     this.getData();
   };
@@ -45,11 +46,7 @@ export default class Home extends Component {
 
     console.log(this.state.search);
 
-    if (this.state.search === null || this.state.search === "") {
-      alert(
-        "Your search field is empty. Please enter a movie title to find a movie."
-      );
-    } else {
+ 
       let url = `https://lwtuvh36nl.execute-api.us-east-2.amazonaws.com/pop/series/${this.state.currentUser}`;
 
       fetch(url, {
@@ -58,17 +55,29 @@ export default class Home extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          if (json.results[0] === undefined) {
-            alert("Please Login");
+          if (json.body === undefined) {
+            console.log("Please Login");
           } else {
-            console.log(json);
+            console.log(json.body);
             this.setState({
-              testTitle: json.seriesName,
+              testTitle: json.body[1].seriesName,
             });
+
+           
+            this.setState({
+              movies: json.body.map((show, i) => {
+              
+                return (<div key={i}>{show.seriesName}</div>);
+              })
+            });
+
+            
           }
+          return (<div>{this.state.movies}</div>)
+          
         });
 
-    }
+    
   }
 
   handleShow = () => this.setState({ active: true });
@@ -183,6 +192,8 @@ export default class Home extends Component {
                         </div>
                       </div>
                     </div>
+                    {/* {this.getData()} */}
+                    <h1>{this.state.movies}</h1>
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
