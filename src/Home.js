@@ -36,9 +36,9 @@ export default class Home extends Component {
 
   componentDidMount = () => {
     console.log(this.state.testUser + "!!!");
-    var name = this.state.testUser;
+    
     var cookies = new Cookies();
-    var name = cookies.get('userN')
+    var name = cookies.get('userN').split("@")[0];
     this.setState({ testUser: name });
     this.getData();
   };
