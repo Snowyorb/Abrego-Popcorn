@@ -14,8 +14,10 @@ import {
   Icon,
   Form,
   TextArea,
+  DropStatus
 } from "semantic-ui-react";
 import add from "./images/add_icon.jpg";
+import place from './images/placeholder.jpg';
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
@@ -59,16 +61,100 @@ export default class Home extends Component {
             console.log("Please Login");
           } else {
             console.log(json.body);
-            this.setState({
-              testTitle: json.body[1].seriesName,
-            });
+       
 
            
             this.setState({
               movies: json.body.map((show, i) => {
-              
-                return (<div key={i}>{show.seriesName}</div>);
+               if(show.imageUrl ==""){
+                 show.imageUrl = place
+                 return (<Grid.Column key={i}>
+                  <div className="movie">
+                    <h3 id="title">{show.seriesName}</h3>
+                    <div class="container">
+                      <img
+                        alt=""
+                        id="pic2"
+                        class="image"
+                        src={show.imageUrl}
+                      />
+                      <div className="colorOver">
+                        <div class="overlay">
+                          <Popup
+                            content="Edit"
+                            trigger={
+                              <Button
+                                style={{
+                                  marginTop: "10px",
+                                  marginBottom: "10px",
+                                  backgroundColor: "#faff72",
+                                  color: "black",
+                                }}
+                                icon="edit outline"
+                              />
+                            }
+                          />
+
+                          <div>
+                            {/* <DropStatus id="dropStyle" /> */}
+                            <h3 style={{color:'#faff72'}}>{show.status}</h3>
+                          </div>
+
+                          <p className="desc">
+                           {show.description}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Grid.Column>);
+               
+               }
+
+               else{
+                return (<Grid.Column key={i}>
+                  <div className="movie">
+                    <h3 id="title">{show.seriesName}</h3>
+                    <div class="container">
+                      <img
+                        alt=""
+                        id="pic2"
+                        class="image"
+                        src={show.imageUrl}
+                      />
+                      <div className="colorOver">
+                        <div class="overlay">
+                          <Popup
+                            content="Edit"
+                            trigger={
+                              <Button
+                                style={{
+                                  marginTop: "10px",
+                                  marginBottom: "10px",
+                                  backgroundColor: "#faff72",
+                                  color: "black",
+                                }}
+                                icon="edit outline"
+                              />
+                            }
+                          />
+
+                          <div>
+                            {/* <DropStatus id="dropStyle" /> */}
+                            <h3 style={{color:'#faff72'}}>{show.status}</h3>
+                          </div>
+
+                          <p className="desc">
+                           {show.description}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Grid.Column>);
+               }
               })
+            
             });
 
             
@@ -177,7 +263,7 @@ export default class Home extends Component {
                         className="wow"
                         style={{ color: "yellow" }}
                       >
-                        {this.state.testTitle}
+                        Add a Series
                       </h3>
                       <div class="container">
                         <img
@@ -193,8 +279,8 @@ export default class Home extends Component {
                       </div>
                     </div>
                     {/* {this.getData()} */}
-                    <h1>{this.state.movies}</h1>
                   </Grid.Column>
+                    {this.state.movies}
                 </Grid.Row>
               </Grid>
             </div>
