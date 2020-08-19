@@ -14,26 +14,157 @@ import {
   Icon,
   Form,
   TextArea,
+  DropStatus
 } from "semantic-ui-react";
 import add from "./images/add_icon.jpg";
-import Cookies from 'universal-cookie';
+import place from './images/placeholder.jpg';
+import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
 
-
 export default class Home extends Component {
-  state = {
-    testUser: cookies.get('userN'),
-    currentUser: cookies.get('userN')
+  constructor(props) {
+    super(props);
+    this.getData = this.getData.bind(this);
+    this.state = {
+      testUser: cookies.get("userN"),
+      currentUser: cookies.get("userN"),
+      testTitle: "",
+      movies: "HI"
+    };
+  }
+
+  componentDidMount = () => {
+    console.log(this.state.testUser + "!!!");
+    
+    var cookies = new Cookies();
+    var name = cookies.get('userN').split("@")[0];
+    this.setState({ testUser: name });
+    this.getData();
   };
-  
-  componentDidMount = () =>{
-    console.log(this.state.testUser + "!!!")
-    var name = this.state.testUser.split("@")[0];
-  //   var cookies = new Cookies();
-  //   var name = cookies.get('userN')
-   this.setState({ testUser: name });
- }
+
+  getData() {
+
+
+    console.log(this.state.search);
+
+ 
+      let url = `https://lwtuvh36nl.execute-api.us-east-2.amazonaws.com/pop/series/${this.state.currentUser}`;
+
+      fetch(url, {
+        method: "GET",
+        headers:{ 'Access-Control-Allow-Origin' : '*' }
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (json.body === undefined) {
+            console.log("Please Login");
+          } else {
+            console.log(json.body);
+       
+
+           
+            this.setState({
+              movies: json.body.map((show, i) => {
+               if(show.imageUrl ==""){
+                 show.imageUrl = place
+                 return (<Grid.Column key={i}>
+                  <div className="movie">
+                    <h3 id="title">{show.seriesName}</h3>
+                    <div class="container">
+                      <img
+                        alt=""
+                        id="pic2"
+                        class="image"
+                        src={show.imageUrl}
+                      />
+                      <div className="colorOver">
+                        <div class="overlay">
+                          <Popup
+                            content="Edit"
+                            trigger={
+                              <Button
+                                style={{
+                                  marginTop: "10px",
+                                  marginBottom: "10px",
+                                  backgroundColor: "#faff72",
+                                  color: "black",
+                                }}
+                                icon="edit outline"
+                              />
+                            }
+                          />
+
+                          <div>
+                            {/* <DropStatus id="dropStyle" /> */}
+                            <h3 style={{color:'#faff72'}}>{show.status}</h3>
+                          </div>
+
+                          <p className="desc">
+                           {show.description}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Grid.Column>);
+               
+               }
+
+               else{
+                return (<Grid.Column key={i}>
+                  <div className="movie">
+                    <h3 id="title">{show.seriesName}</h3>
+                    <div class="container">
+                      <img
+                        alt=""
+                        id="pic2"
+                        class="image"
+                        src={show.imageUrl}
+                      />
+                      <div className="colorOver">
+                        <div class="overlay">
+                          <Popup
+                            content="Edit"
+                            trigger={
+                              <Button
+                                style={{
+                                  marginTop: "10px",
+                                  marginBottom: "10px",
+                                  backgroundColor: "#faff72",
+                                  color: "black",
+                                }}
+                                icon="edit outline"
+                              />
+                            }
+                          />
+
+                          <div>
+                            {/* <DropStatus id="dropStyle" /> */}
+                            <h3 style={{color:'#faff72'}}>{show.status}</h3>
+                          </div>
+
+                          <p className="desc">
+                           {show.description}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Grid.Column>);
+               }
+              })
+            
+            });
+
+            
+          }
+          return (<div>{this.state.movies}</div>)
+          
+        });
+
+    
+  }
 
   handleShow = () => this.setState({ active: true });
   handleHide = () => this.setState({ active: false });
@@ -89,7 +220,7 @@ export default class Home extends Component {
             <Form.Field
               control={TextArea}
               label="Description"
-              inverted= 'true'
+              inverted="true"
               placeholder="Enter a short description"
               maxLength="250"
               id="des-show"
@@ -103,7 +234,7 @@ export default class Home extends Component {
           </Form>
         </Dimmer>
         <div className="home-display" id="homeBody">
-        <title>Popcorn - Home</title>
+          <title>Popcorn - Home</title>
           <BodyClassName className="home-page" />
           <header>
             <h1 className="popcorn" id="t">
@@ -132,7 +263,7 @@ export default class Home extends Component {
                         className="wow"
                         style={{ color: "yellow" }}
                       >
-                        Add a new Series
+                        Add a Series
                       </h3>
                       <div class="container">
                         <img
@@ -147,232 +278,9 @@ export default class Home extends Component {
                         </div>
                       </div>
                     </div>
+                    {/* {this.getData()} */}
                   </Grid.Column>
-                  <Grid.Column>
-                    <div className="movie">
-                      <h3 id="title">{this.state.testUser}</h3>
-                      <div class="container">
-                        <img
-                          alt=""
-                          id="pic2"
-                          class="image"
-                          src="https://image.tmdb.org/t/p/w500/vBaLz8kZNXYvTjHwrTewkTw3l7k.jpg"
-                        />
-                        <div className="colorOver">
-                          <div class="overlay">
-                            <Popup
-                              content="Edit"
-                              trigger={
-                                <Button
-                                  style={{
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                    backgroundColor: "#faff72",
-                                    color: "black",
-                                  }}
-                                  icon="edit outline"
-                                />
-                              }
-                            />
-
-                            <div>
-                              <DropStatus id="dropStyle" />
-                            </div>
-
-                            <p className="desc">
-                              Lorem ipsum dolor sit amet, consetetur sadipscing
-                              elitr, sed diam nonumy eirmod tempor invidunt ut
-                              labore et.Lorem ipsum dolor sit amet, consetetur
-                              sadipscing elitr, sed diam nonumy eirmod tempor
-                              invidunt ut labore et.Lorem ipsum dolor sit amet,
-                              consetetur sadipscing elitr, sed diam nonumy
-                              eirmod tempor invidunt ut labore et.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Grid.Column>
-                  <Grid.Column>
-                    <div className="movie">
-                      <h3 id="title">Series Title</h3>
-                      <div class="container">
-                        <img
-                          id="pic2"
-                          alt=""
-                          class="image"
-                          src="https://cdn.flickeringmyth.com/wp-content/uploads/2020/02/The-Letter-for-the-King-poster-600x889.jpg"
-                        />
-                        <div className="colorOver">
-                          <div class="overlay">
-                            <Popup
-                              content="Edit"
-                              trigger={
-                                <Button
-                                  style={{
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                    backgroundColor: "#faff72",
-                                    color: "black",
-                                  }}
-                                  icon="edit outline"
-                                />
-                              }
-                            />
-
-                            <div>
-                              <DropStatus id="dropStyle" />
-                            </div>
-
-                            <p className="desc">
-                              Lorem ipsum dolor sit amet, consetetur sadipscing
-                              elitr, sed diam nonumy eirmod tempor invidunt ut
-                              labore et.Lorem ipsum dolor sit amet, consetetur
-                              sadipscing elitr, sed diam nonumy eirmod tempor
-                              invidunt ut labore et.Lorem ipsum dolor sit amet,
-                              consetetur sadipscing elitr, sed diam nonumy
-                              eirmod tempor invidunt ut labore et.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Grid.Column>
-                  <Grid.Column>
-                    <div className="movie">
-                      <h3 id="title">Series Title</h3>
-                      <div class="container">
-                        <img
-                          alt=""
-                          id="pic2"
-                          class="image"
-                          src="https://i.redd.it/xwjlz1zljf921.jpg"
-                        />
-                        <div className="colorOver">
-                          <div class="overlay">
-                            <Popup
-                              content="Edit"
-                              trigger={
-                                <Button
-                                  style={{
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                    backgroundColor: "#faff72",
-                                    color: "black",
-                                  }}
-                                  icon="edit outline"
-                                />
-                              }
-                            />
-
-                            <div>
-                              <DropStatus id="dropStyle" />
-                            </div>
-
-                            <p className="desc">
-                              Lorem ipsum dolor sit amet, consetetur sadipscing
-                              elitr, sed diam nonumy eirmod tempor invidunt ut
-                              labore et.Lorem ipsum dolor sit amet, consetetur
-                              sadipscing elitr, sed diam nonumy eirmod tempor
-                              invidunt ut labore et.Lorem ipsum dolor sit amet,
-                              consetetur sadipscing elitr, sed diam nonumy
-                              eirmod tempor invidunt ut labore et.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Grid.Column>
-                  <Grid.Column>
-                    <div className="movie">
-                      <h3 id="title">Series Title</h3>
-                      <div class="container">
-                        <img
-                          alt=""
-                          id="pic2"
-                          class="image"
-                          src="https://www.indiewire.com/wp-content/uploads/2017/09/first-they-killed-my-father.jpg?w=674"
-                        />
-                        <div className="colorOver">
-                          <div class="overlay">
-                            <Popup
-                              content="Edit"
-                              trigger={
-                                <Button
-                                  style={{
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                    backgroundColor: "#faff72",
-                                    color: "black",
-                                  }}
-                                  icon="edit outline"
-                                />
-                              }
-                            />
-
-                            <div>
-                              <DropStatus id="dropStyle" />
-                            </div>
-
-                            <p className="desc">
-                              Lorem ipsum dolor sit amet, consetetur sadipscing
-                              elitr, sed diam nonumy eirmod tempor invidunt ut
-                              labore et.Lorem ipsum dolor sit amet, consetetur
-                              sadipscing elitr, sed diam nonumy eirmod tempor
-                              invidunt ut labore et.Lorem ipsum dolor sit amet,
-                              consetetur sadipscing elitr, sed diam nonumy
-                              eirmod tempor invidunt ut labore et.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Grid.Column>
-                  <Grid.Column>
-                    <div className="movie">
-                      <h3 id="title">Series Title</h3>
-                      <div class="container">
-                        <img
-                          alt=""
-                          id="pic2"
-                          class="image"
-                          src="https://lh3.googleusercontent.com/proxy/mH59Yei7huqczx-Ps70qOJh30sxbRzVvGdrdE73GyzpfoOLBTx6XhXSUiQ0XIoMHSDVDLRpHrk84rhYg6pU2glpNgHLkqcLrSl0VbWEdDKlwee3ka0w5dkXWjppPRZt45sXILoKmZPrBZWzIQA7uDOAXPbZqZXBCkltcJvlo4imJw9YA0AFd0ITPaoUB5w"
-                        />
-                        <div className="colorOver">
-                          <div class="overlay">
-                            <Popup
-                              content="Edit"
-                              trigger={
-                                <Button
-                                  style={{
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                    backgroundColor: "#faff72",
-                                    color: "black",
-                                  }}
-                                  icon="edit outline"
-                                />
-                              }
-                            />
-
-                            <div>
-                              <DropStatus id="dropStyle" />
-                            </div>
-
-                            <p className="desc">
-                              Lorem ipsum dolor sit amet, consetetur sadipscing
-                              elitr, sed diam nonumy eirmod tempor invidunt ut
-                              labore et.Lorem ipsum dolor sit amet, consetetur
-                              sadipscing elitr, sed diam nonumy eirmod tempor
-                              invidunt ut labore et.Lorem ipsum dolor sit amet,
-                              consetetur sadipscing elitr, sed diam nonumy
-                              eirmod tempor invidunt ut labore et.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Grid.Column>
+                    {this.state.movies}
                 </Grid.Row>
               </Grid>
             </div>
