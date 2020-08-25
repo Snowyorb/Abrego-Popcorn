@@ -72,6 +72,7 @@ body {
 @import url("https://fonts.googleapis.com/css2?family=Raleway&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Raleway&family=Sacramento&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Damion&family=Raleway&family=Sacramento&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=BenchNine:wght@700&display=swap');
 
 .url-link {
   color: #ffff;
@@ -184,10 +185,6 @@ body {
 .avgText {
   margin-top: 32px;
 }
-/* 
-h2 {
-  color: white;
-} */
 
 .title-search {
   width: 163px;
@@ -234,29 +231,13 @@ header {
   color: #faff72;
 }
 
-/* header h1 {
-  line-height: 45px;
-  font-size: 20px;
-  margin: 0;
-  float: left;
-  display: inline-block;
-} */
 
 .movieStack {
   display: table;
-  width: 100%; /*Optional*/
-  table-layout: fixed; /*Optional*/
-  border-spacing: 10px; /*Optional*/
+  width: 100%; 
+  table-layout: fixed; 
+  border-spacing: 10px; 
 }
-
-/* h1 {
-  font-size: 2em;
-  margin-bottom: 0.5rem;
-} */
-
-/* h3 {
-  color: #fff;
-} */
 
 #dropStyle {
   color: #000;
@@ -326,6 +307,27 @@ label:hover ~ label {
 .container {
   position: relative;
   width: 50%;
+}
+
+.rad{
+  color: #fff;
+  margin-right: 10px;
+  font-size: 23px;
+  font-family: 'BenchNine', sans-serif;
+}
+
+.border{
+  border-style: double;
+  border-color: #fff;
+  width: 50px;
+  height: 50px;
+}
+
+.radTitle{
+  color: #faff72;
+  font-size: 20px;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
 img {
@@ -467,5 +469,8 @@ label:hover ~ input:checked ~ label {
   }
   #gridBoi {
     margin-left: 13% !important;
+  }
+  .radTitle{
+    margin-top: 71px;
   }
 }

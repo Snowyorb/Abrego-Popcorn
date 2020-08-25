@@ -14,6 +14,9 @@ import {
   Icon,
   Form,
   TextArea,
+  Radio,
+  Sidebar,
+  Menu,
 } from "semantic-ui-react";
 import add from "./images/add_icon.jpg";
 import place from "./images/placeholder.jpg";
@@ -25,10 +28,10 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
     this.getData = this.getData.bind(this);
-    this.delObj = this.delObj.bind(this); 
-    this.addObj = this.addObj.bind(this); 
-    this.handleChange = this.handleChange.bind(this); 
-    this.handleSubmit = this.handleSubmit.bind(this); 
+    this.delObj = this.delObj.bind(this);
+    this.addObj = this.addObj.bind(this);
+
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
       testUser: cookies.get("userN"),
       currentUser: cookies.get("userN"),
@@ -42,6 +45,9 @@ export default class Home extends Component {
       description: "",
       image: "",
       status: "",
+      activeEdit: false,
+      activeRadio: false,
+      selectedFilter: "",
       watchOpt: [
         {
           key: "c",
@@ -72,7 +78,16 @@ export default class Home extends Component {
               "https://cdn0.iconfinder.com/data/icons/free-daily-icon-set/512/Wrong-512.png",
           },
         },
-      ]
+        {
+          key: "ww",
+          value: "ww",
+          text: "Want to Watch",
+          image: {
+            avatar: true,
+            src: "https://static.thenounproject.com/png/642123-200.png",
+          },
+        },
+      ],
     };
   }
 
@@ -85,54 +100,67 @@ export default class Home extends Component {
     this.getData();
   };
 
-  changeStatus(movieStatus){
-    console.log("current Status: " + movieStatus)
+  changeStatus(movieStatus) {
+    console.log("current Status: " + movieStatus);
   }
-  
-  delObj= (movieId) => {
-    console.log("delete: "+movieId)
-    // event.preventDefault();
-   
-     // console.log(data.username)
-     fetch(`https://lwtuvh36nl.execute-api.us-east-2.amazonaws.com/pop/findseries/${movieId}`, {
-       method: 'DELETE',   
-       headers: {
-         'Content-Type': 'application/json',
+
+  delObj = (movieId) => {
+    console.log("delete: " + movieId);
+    fetch(
+      `https://lwtuvh36nl.execute-api.us-east-2.amazonaws.com/pop/findseries/${movieId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
         },
-        
-      })
+      }
+    )
       .then((response) => response.json())
       .then((json) => {
-        this.setState({movies: json.body})
+        this.setState({ movies: json.body });
         this.getData();
-      })
-}
+      });
+  };
 
-refresh = () =>{
-  window.location.reload(false);
-}
+  refresh = () => {
+    window.location.reload(false);
+  };
 
-addObj = () =>{
-  const data = {
-    "seriesName": this.state.newSeriesName,
-      "imageUrl": this.state.newImageUrl,
-      "description": this.state.newDescription,
-      "user": this.state.currentUser,
-      "status": this.state.newStatus
-  }
-  fetch(`https://lwtuvh36nl.execute-api.us-east-2.amazonaws.com/pop/findseries`, {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-     },
-     body: JSON.stringify(data)
-  });
-  {this.handleHide()}
-  
-        this.getData();
-  console.log("IT SAVED BITCH: "+this.state.newSeriesName+" "+this.state.newImageUrl+" "+this.state.newDescription+" "+this.state.newStatus)
-}
+  addObj = () => {
+    const data = {
+      seriesName: this.state.newSeriesName,
+      imageUrl: this.state.newImageUrl,
+      description: this.state.newDescription,
+      user: this.state.currentUser,
+      status: this.state.newStatus,
+    };
+    fetch(
+      `https://lwtuvh36nl.execute-api.us-east-2.amazonaws.com/pop/findseries`,
+      {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    {
+      this.handleHide();
+      this.getData();
+    }
 
+    this.getData();
+    console.log(
+      "IT SAVED: " +
+        this.state.newSeriesName +
+        " " +
+        this.state.newImageUrl +
+        " " +
+        this.state.newDescription +
+        " " +
+        this.state.newStatus
+    );
+  };
 
   getData() {
     console.log(this.state.search);
@@ -166,48 +194,51 @@ addObj = () =>{
                         />
                         <div className="colorOver">
                           <div class="overlay">
-                            
-                          <h4 className='ser'>{show.seriesName}</h4>
+                            <h4 className="ser">{show.seriesName}</h4>
                             <div>
-                              <h3 style={{ color: "#faff72" }}>
-                                Status
-                              </h3>
+                              <h3 style={{ color: "#faff72" }}>Status</h3>
                             </div>
-                            <Dropdown defaultValue placeholder={show.status} onChange={this.changeStatus(show.status)} fluid selection options={this.state.watchOpt} id="dropStyle"/>
+                            <Dropdown
+                              defaultValue
+                              placeholder={show.status}
+                              onChange={(e) =>
+                                (show.status = e.target.textContent)
+                              }
+                              fluid
+                              selection
+                              options={this.state.watchOpt}
+                              id="dropStyle"
+                            />
 
                             <p className="desc">{show.description}</p>
-                            <Button.Group icon  >
-                            <Popup
-                              content="Delete"
-                              trigger={
-                                <Button
-                                class="ui circular icon button"
-                                onClick={() => this.delObj(show.id)} 
-                                style={{
-                                  
-                                  backgroundColor: "#5ECCFD",
-                                  color: "white",
-                                }}
-                                  icon="trash alternate outline"
+                            <Button.Group icon>
+                              <Popup
+                                content="Delete"
+                                trigger={
+                                  <Button
+                                    class="ui circular icon button"
+                                    onClick={() => this.delObj(show.id)}
+                                    style={{
+                                      backgroundColor: "#5ECCFD",
+                                      color: "white",
+                                    }}
+                                    icon="trash alternate outline"
                                   />
-                              }
-                              
-                            />
-                            <Button.Or />
-                            <Popup
-                              content="Edit"
-                              trigger={
-                                <Button
-                                  
-                                  style={{
-    
-                                    backgroundColor: "#faff72",
-                                    color: "black",
-                                  }}
-                                  icon="edit outline"
-                                />
-                              }
-                            />
+                                }
+                              />
+                              <Button.Or />
+                              <Popup
+                                content="Edit"
+                                trigger={
+                                  <Button
+                                    style={{
+                                      backgroundColor: "#faff72",
+                                      color: "black",
+                                    }}
+                                    icon="edit outline"
+                                  />
+                                }
+                              />
                             </Button.Group>
                           </div>
                         </div>
@@ -229,47 +260,51 @@ addObj = () =>{
                         />
                         <div className="colorOver">
                           <div class="overlay">
-                            
-                            <h4 className='ser'>{show.seriesName}</h4>
+                            <h4 className="ser">{show.seriesName}</h4>
                             <div>
-                              <h3 style={{ color: "#faff72" }}>
-                                Status
-                              </h3>
+                              <h3 style={{ color: "#faff72" }}>Status</h3>
                             </div>
-                            <Dropdown placeholder={show.status} defaultValue fluid selection onChange={this.changeStatus(show.status)} options={this.state.watchOpt} id="dropStyle"/>
+                            <Dropdown
+                              placeholder={show.status}
+                              defaultValue
+                              fluid
+                              selection
+                              onChange={(e) =>
+                                (show.status = e.target.textContent)
+                              }
+                              options={this.state.watchOpt}
+                              id="dropStyle"
+                            />
 
                             <p className="desc">{show.description}</p>
-                            <Button.Group icon  >
-                            <Popup
-                              content="Delete"
-                              trigger={
-                                <Button
-                                class="ui circular icon button"
-                                onClick={() => this.delObj(show.id)} 
-                                style={{
-                                  backgroundColor: "#5ECCFD",
-                                  color: "white",
-                                }}
-                                  icon="trash alternate outline"
-                                  
-                                />
-                              }
-                              
-                            />
-                            <Button.Or />
-                            <Popup
-                              content="Edit"
-                              
-                              trigger={
-                                <Button
-                                  style={{
-                                    backgroundColor: "#faff72",
-                                    color: "black",
-                                  }}
-                                  icon="edit outline"
-                                />
-                              }
-                            />
+                            <Button.Group icon>
+                              <Popup
+                                content="Delete"
+                                trigger={
+                                  <Button
+                                    class="ui circular icon button"
+                                    onClick={() => this.delObj(show.id)}
+                                    style={{
+                                      backgroundColor: "#5ECCFD",
+                                      color: "white",
+                                    }}
+                                    icon="trash alternate outline"
+                                  />
+                                }
+                              />
+                              <Button.Or />
+                              <Popup
+                                content="Edit"
+                                trigger={
+                                  <Button
+                                    style={{
+                                      backgroundColor: "#faff72",
+                                      color: "black",
+                                    }}
+                                    icon="edit outline"
+                                  />
+                                }
+                              />
                             </Button.Group>
                           </div>
                         </div>
@@ -291,17 +326,152 @@ addObj = () =>{
     this.setState({ newStatus: this.state.status });
     this.setState({ newSeriesName: this.state.series });
     console.log("HELLO?" + this.state.newSeriesName);
-    {this.addObj()}
-     {this.getData()}
-     
-  }
+    {
+      this.addObj();
+    }
+    {
+      this.getData();
+    }
+  };
 
- 
-  handleChange = (e, { name, value }) => this.setState({ [name]: value })
-  
+  sideRadio = () => {
+    return (
+      <Sidebar
+      onClickOutside={this.handleHideFilter}
+        as={Menu}
+        animation="push"
+        direction="top"
+        icon="labeled"
+        inverted
+        vertical
+        visible={this.state.activeRadio}
+        width="thin"
+      >
+        <Menu.Item as="a">
+          <Form.Field>
+            <label className="rad">Completed</label>
+            <Radio
+              name="radioGroup"
+              value="Completed"
+              checked={this.state.selectedFilter === "Completed"}
+              onChange={(e) => this.setState({ selectedFilter: "Completed" })}
+            />
+          </Form.Field>
+        </Menu.Item>
+        <Menu.Item as="a">
+          <Form.Field>
+            <label className="rad">Want to Watch</label>
+            <Radio
+              name="radioGroup"
+              value="Want to Watch"
+              checked={this.state.selectedFilter === "Want to Watch"}
+              onChange={(e) =>
+                this.setState({ selectedFilter: "Want to Watch" })
+              }
+            />
+          </Form.Field>
+        </Menu.Item>
+        <Menu.Item as="a">
+          <Form.Field>
+            <label className="rad">Currently Watching</label>
+            <Radio
+              name="radioGroup"
+              value="Completed"
+              checked={this.state.selectedFilter === "Currently Watching"}
+              onChange={(e) =>
+                this.setState({ selectedFilter: "Currently Watching" })
+              }
+            />
+          </Form.Field>
+        </Menu.Item>
+        <Menu.Item as="a">
+          <label className="rad">Dropped</label>
+          <Radio
+            name="radioGroup"
+            value="Dropped"
+            checked={this.state.selectedFilter === "Dropped"}
+            onChange={(e) => this.setState({ selectedFilter: "Dropped" })}
+          />
+        </Menu.Item>
+      </Sidebar>
+    );
+  };
+
+  renderRadio = () => {
+    return (
+      <div className="border">
+        <Form.Field className="radTitle">
+          Filter By: <b>{this.state.selectedFilter}</b>
+        </Form.Field>
+        <Form.Field>
+          <label className="rad">Completed</label>
+          <Radio
+            name="radioGroup"
+            value="Completed"
+            checked={this.state.selectedFilter === "Completed"}
+            onChange={(e) => this.setState({ selectedFilter: "Completed" })}
+          />
+        </Form.Field>
+        <Form.Field>
+          <label className="rad">Want to Watch</label>
+          <Radio
+            name="radioGroup"
+            value="Want to Watch"
+            checked={this.state.selectedFilter === "Want to Watch"}
+            onChange={(e) => this.setState({ selectedFilter: "Want to Watch" })}
+          />
+        </Form.Field>
+        <Form.Field>
+          <label className="rad">Currently Watching</label>
+          <Radio
+            name="radioGroup"
+            value="Completed"
+            checked={this.state.selectedFilter === "Currently Watching"}
+            onChange={(e) =>
+              this.setState({ selectedFilter: "Currently Watching" })
+            }
+          />
+        </Form.Field>
+        <Form.Field>
+          <label className="rad">Dropped</label>
+          <Radio
+            name="radioGroup"
+            value="Dropped"
+            checked={this.state.selectedFilter === "Dropped"}
+            onChange={(e) => this.setState({ selectedFilter: "Dropped" })}
+          />
+        </Form.Field>
+      </div>
+    );
+  };
+  // showModal = () => {
+  //   return  (<Modal
+  //   closeOnEscape={closeOnEscape}
+  //   closeOnDimmerClick={closeOnDimmerClick}
+  //   open={open}
+  //   onOpen={() => dispatch({ type: 'OPEN_MODAL' })}
+  //   onClose={() => dispatch({ type: 'CLOSE_MODAL' })}
+  //   trigger={<Button>Show Modal</Button>}
+  // >
+  //   <Modal.Header>Delete Your Account</Modal.Header>
+  //   <Modal.Content>
+  //     <p>Are you sure you want to delete your account</p>
+  //   </Modal.Content>
+  //   <Modal.Actions>
+  //     <Button onClick={() => dispatch({ type: 'CLOSE_MODAL' })} negative>
+  //       No
+  //     </Button>
+  //     <Button onClick={() => dispatch({ type: 'CLOSE_MODAL' })} positive>
+  //       Yes
+  //     </Button>
+  //   </Modal.Actions>
+  // </Modal>)
+  // }
 
   handleShow = () => this.setState({ active: true });
   handleHide = () => this.setState({ active: false });
+  handleShowEdit = () => this.setState({ activeEdit: true });
+  handleHideFilter = () => this.setState({ activeRadio: false });
   render() {
     const { active } = this.state;
     return (
@@ -312,50 +482,53 @@ addObj = () =>{
             Add a Show
           </Header>
           <Form onSubmit={this.handleSubmit}>
-            <Form.Field name='series'
-              value={this.state.series} 
-              // onChange={this.handleChange}
-               onChange={(e)=> this.setState({newSeriesName: e.target.value})}
-              >
+            <Form.Field
+              name="series"
+              value={this.state.series}
+              onChange={(e) => this.setState({ newSeriesName: e.target.value })}
+            >
               <label className="show-me">Series Name</label>
               <input placeholder="Series Name" />
             </Form.Field>
-            <Form.Field name='image'
-              value={this.state.image} 
-              // onChange={this.handleChange}
-               onChange={(e)=> this.setState({newImageUrl: e.target.value})}
-              >
+            <Form.Field
+              name="image"
+              value={this.state.image}
+              onChange={(e) => this.setState({ newImageUrl: e.target.value })}
+            >
               <label className="show-me">Image Url</label>
               <input placeholder="Image Url" />
             </Form.Field>
             <label className="show-me">Description</label>
-        
+
             <Form.Field
-            
               control={TextArea}
-              // onChange={this.handleChange}
               inverted="true"
-              onChange={(e)=> this.setState({newDescription: e.target.value})}
-              name='description'
+              onChange={(e) =>
+                this.setState({ newDescription: e.target.value })
+              }
+              name="description"
               value={this.state.newDescription}
               placeholder="Enter a short description"
               maxLength="250"
               id="des-show"
               className="show-me"
-            >  
-            </Form.Field>
-            <Form.Field name='status'
-            // onChange={this.handleChange}
-              value={this.state.status}>
+            ></Form.Field>
+            <Form.Field name="status" value={this.state.status}>
               <label className="show-me">Status</label>
-              <Dropdown placeholder="Status" fluid selection options={this.state.watchOpt}
-              
-              onChange={(e)=> this.setState({newStatus: e.target.textContent})}
+              <Dropdown
+                placeholder="Status"
+                fluid
+                selection
+                options={this.state.watchOpt}
+                onChange={(e) =>
+                  this.setState({ newStatus: e.target.textContent })
+                }
               />
             </Form.Field>
             <Form.Button type="submit">Submit</Form.Button>
           </Form>
         </Dimmer>
+        <Form></Form>
         <div className="home-display" id="homeBody">
           <title>Popcorn - Home</title>
           <BodyClassName className="home-page" />
@@ -370,6 +543,9 @@ addObj = () =>{
               </a>
             </Link>
           </header>
+
+          <button type='button' onClick={()=> this.setState({activeRadio: !this.state.activeRadio})}>Filter</button>
+          {this.sideRadio()}
           <div id="movieStack">
             <div class="movieBlock">
               <Grid
