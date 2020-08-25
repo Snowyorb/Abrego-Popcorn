@@ -80,6 +80,20 @@ body {
   text-decoration: underline;
 }
 
+.ser{
+  color: #fff;
+  font-style: italic;
+  font-weight: 700;
+  margin-top: 200px;
+}
+
+.delBtn {
+  font-size: 20;
+  color: "black";
+  margin-top: 130;
+  margin-left: 130;
+}
+
 .show-me {
   color: #fff !important;
 }
@@ -212,6 +226,7 @@ header {
 
 #t {
   float: left;
+  margin: -35px;
 }
 
 #t:hover {
@@ -219,13 +234,13 @@ header {
   color: #faff72;
 }
 
-header h1 {
+/* header h1 {
   line-height: 45px;
   font-size: 20px;
   margin: 0;
   float: left;
   display: inline-block;
-}
+} */
 
 .movieStack {
   display: table;
@@ -234,10 +249,10 @@ header h1 {
   border-spacing: 10px; /*Optional*/
 }
 
-h1 {
+/* h1 {
   font-size: 2em;
   margin-bottom: 0.5rem;
-}
+} */
 
 /* h3 {
   color: #fff;
@@ -322,7 +337,7 @@ img {
   bottom: 100%;
   left: 0;
   right: 0;
-  background-color: rgba(217, 63, 135, 0.62);
+  background-color: rgba(217, 63, 135, 0.76);
 
   overflow: hidden;
   width: 200%;
