@@ -224,6 +224,20 @@ header {
 #t {
   float: left;
   margin: -35px;
+  animation: 0.6s infinite color-change;
+}
+
+@keyframes color-change {
+  0% {
+    color: #faff72;
+  }
+  50% {
+    color: #fff;
+  }
+  100% {
+    color: #faff72;
+  }
+  
 }
 
 #t:hover {
