@@ -162,6 +162,39 @@ export default class Home extends Component {
     );
   };
 
+  editObj = (movieId) => {
+    const dataIn = {
+      id: movieId,
+      seriesName: "FUCK YEAH WORKED",
+      imageUrl: "",
+      description: "....",
+      user: this.state.currentUser,
+      status: "Want to Watch",
+    };
+
+    fetch(
+      `https://lwtuvh36nl.execute-api.us-east-2.amazonaws.com/pop/findseries/${movieId}`,
+      {
+        method: "put",
+        body:JSON.stringify(dataIn),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }) .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+        console.log(dataIn)
+        this.getData();
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      }); 
+
+    console.log(movieId);
+        }
+  
+
+
   getData() {
     console.log(this.state.search);
 
@@ -231,6 +264,7 @@ export default class Home extends Component {
                                 content="Edit"
                                 trigger={
                                   <Button
+                                  onClick={() => this.editObj(show.id)}
                                     style={{
                                       backgroundColor: "#faff72",
                                       color: "black",
@@ -297,6 +331,7 @@ export default class Home extends Component {
                                 content="Edit"
                                 trigger={
                                   <Button
+                                  onClick={() => this.editObj(show.id)}
                                     style={{
                                       backgroundColor: "#faff72",
                                       color: "black",
