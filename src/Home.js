@@ -17,6 +17,8 @@ import {
   Radio,
   Sidebar,
   Menu,
+  Modal,
+  Input,
 } from "semantic-ui-react";
 import add from "./images/add_icon.jpg";
 import place from "./images/placeholder.jpg";
@@ -37,14 +39,21 @@ export default class Home extends Component {
       currentUser: cookies.get("userN"),
       testTitle: "",
       movies: "HI",
-      newSeriesName: "",
-      newImageUrl: "",
-      newDescription: "",
-      newStatus: "",
+      fixSeriesName: "",
+      fixImageUrl: "",
+      fixDescription: "",
+      fixStatus: "",
       series: "",
       description: "",
       image: "",
       status: "",
+      editId: "",
+      editSeriesName: "",
+      editDescription: "",
+      editImageUrl: "",
+      editStatus: "",
+      open: false,
+      showUpdate: false,
       activeEdit: false,
       activeRadio: false,
       selectedFilter: "",
@@ -162,38 +171,118 @@ export default class Home extends Component {
     );
   };
 
+  modalPopUp = () => {
+    return (
+      <Modal
+        // trigger={<Button>Show Modal</Button>}
+        onClickOutside={this.handleCloseModal}
+        onClose={() => this.setState({ open: false })}
+        open={this.state.open}
+      >
+        <Modal.Header>Update Series</Modal.Header>
+        <Modal.Content>
+          <Form onSubmit={this.handleUpdate}>
+            <label>Series Name</label>
+
+            <Form.Field
+              control={Input}
+              inverted="true"
+              onChange={(e) => this.setState({ fixSeriesName: e.target.value })}
+              name="series"
+              defaultValue={this.state.editSeriesName}
+              placeholder="Enter a series title"
+
+         
+            ></Form.Field>
+
+            <label>Image Url</label>
+
+            <Form.Field
+              control={Input}
+              inverted="true"
+              onChange={(e) => this.setState({ fixImageUrl: e.target.value })}
+              name="image"
+              defaultValue={this.state.editImageUrl}
+              placeholder="Enter a short image url"
+
+            ></Form.Field>
+
+            <label>Description</label>
+
+            <Form.Field
+              control={TextArea}
+              inverted="true"
+              onChange={(e) =>
+                this.setState({ fixDescription: e.target.value })
+              }
+              name="description"
+              defaultValue={this.state.editDescription}
+              // value={this.state.editDescription}
+              placeholder="Enter a short description"
+              maxLength="250"
+              // id="des-show"
+            ></Form.Field>
+            <Form.Field name="status">
+              <label>{this.state.editStatus}</label>
+              <Dropdown
+                placeholder="Status"
+                placeholder={this.state.editStatus}
+                fluid
+                defaultValue={this.state.editStatus}
+                selection
+                options={this.state.watchOpt}
+                onChange={(e) =>
+                  this.setState({ fixStatus: e.target.textContent })
+                }
+              />
+            </Form.Field>
+            {/* <Form.Button type="submit">Submit</Form.Button> */}
+          </Form>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button onClick={() => this.setState({ open: false })} negative>
+            Cancel
+          </Button>
+          <Button type="submit" onClick={this.handleUpdate} positive>
+            Update
+          </Button>
+        </Modal.Actions>
+      </Modal>
+    );
+  };
+
   editObj = (movieId) => {
     const dataIn = {
-      id: movieId,
-      seriesName: "FUCK YEAH WORKED",
-      imageUrl: "",
-      description: "....",
+      id: this.state.editId,
+      seriesName: this.state.fixSeriesName,
+      imageUrl: this.state.fixImageUrl,
+      description: this.state.fixDescription,
       user: this.state.currentUser,
-      status: "Want to Watch",
+      status: this.state.fixStatus,
     };
 
     fetch(
       `https://lwtuvh36nl.execute-api.us-east-2.amazonaws.com/pop/findseries/${movieId}`,
       {
         method: "put",
-        body:JSON.stringify(dataIn),
+        body: JSON.stringify(dataIn),
         headers: {
           "Content-Type": "application/json",
         },
-      }) .then(response => response.json())
-      .then(data => {
-        console.log('Success:', data);
-        console.log(dataIn)
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        console.log(dataIn);
         this.getData();
       })
       .catch((error) => {
-        console.error('Error:', error);
-      }); 
+        console.error("Error:", error);
+      });
 
     console.log(movieId);
-        }
-  
-
+  };
 
   getData() {
     console.log(this.state.search);
@@ -260,11 +349,22 @@ export default class Home extends Component {
                                 }
                               />
                               <Button.Or />
+
                               <Popup
                                 content="Edit"
                                 trigger={
                                   <Button
-                                  onClick={() => this.editObj(show.id)}
+                                    onClick={() =>
+                                      this.setState({
+                                        showUpdate: true,
+                                        open: true,
+                                        editId: show.id,
+                                        editSeriesName: show.seriesName,
+                                        editDescription: show.description,
+                                        editImageUrl: show.imageUrl,
+                                        editStatus: show.status,
+                                      })
+                                    }
                                     style={{
                                       backgroundColor: "#faff72",
                                       color: "black",
@@ -331,7 +431,17 @@ export default class Home extends Component {
                                 content="Edit"
                                 trigger={
                                   <Button
-                                  onClick={() => this.editObj(show.id)}
+                                    onClick={() =>
+                                      this.setState({
+                                        showUpdate: true,
+                                        open: true,
+                                        editId: show.id,
+                                        editSeriesName: show.seriesName,
+                                        editDescription: show.description,
+                                        editImageUrl: show.imageUrl,
+                                        editStatus: show.status,
+                                      })
+                                    }
                                     style={{
                                       backgroundColor: "#faff72",
                                       color: "black",
@@ -369,10 +479,24 @@ export default class Home extends Component {
     }
   };
 
+  handleUpdate = () => {
+    this.setState({ open: false });
+    // this.setState({ fixImageUrl: this.state.fixImageUrl });
+    // this.setState({ fixDescription: this.state.fixDescription });
+    // this.setState({ fixStatus: this.state.fixStatus });
+    // this.setState({ fixSeriesName: this.state.fixSeriesName });
+    {
+      this.editObj();
+    }
+    {
+      this.getData();
+    }
+  };
+
   sideRadio = () => {
     return (
       <Sidebar
-      onClickOutside={this.handleHideFilter}
+        onClickOutside={this.handleHideFilter}
         as={Menu}
         animation="push"
         direction="top"
@@ -479,34 +603,14 @@ export default class Home extends Component {
       </div>
     );
   };
-  // showModal = () => {
-  //   return  (<Modal
-  //   closeOnEscape={closeOnEscape}
-  //   closeOnDimmerClick={closeOnDimmerClick}
-  //   open={open}
-  //   onOpen={() => dispatch({ type: 'OPEN_MODAL' })}
-  //   onClose={() => dispatch({ type: 'CLOSE_MODAL' })}
-  //   trigger={<Button>Show Modal</Button>}
-  // >
-  //   <Modal.Header>Delete Your Account</Modal.Header>
-  //   <Modal.Content>
-  //     <p>Are you sure you want to delete your account</p>
-  //   </Modal.Content>
-  //   <Modal.Actions>
-  //     <Button onClick={() => dispatch({ type: 'CLOSE_MODAL' })} negative>
-  //       No
-  //     </Button>
-  //     <Button onClick={() => dispatch({ type: 'CLOSE_MODAL' })} positive>
-  //       Yes
-  //     </Button>
-  //   </Modal.Actions>
-  // </Modal>)
-  // }
 
   handleShow = () => this.setState({ active: true });
   handleHide = () => this.setState({ active: false });
   handleShowEdit = () => this.setState({ activeEdit: true });
   handleHideFilter = () => this.setState({ activeRadio: false });
+  handleCloseModal = () =>
+    this.setState({ open: false }, console.log("BITCH AINT CLOSING"));
+
   render() {
     const { active } = this.state;
     return (
@@ -579,7 +683,14 @@ export default class Home extends Component {
             </Link>
           </header>
 
-          <button type='button' onClick={()=> this.setState({activeRadio: !this.state.activeRadio})}>Filter</button>
+          <button
+            type="button"
+            onClick={() =>
+              this.setState({ activeRadio: !this.state.activeRadio })
+            }
+          >
+            Filter
+          </button>
           {this.sideRadio()}
           <div id="movieStack">
             <div class="movieBlock">
@@ -614,6 +725,7 @@ export default class Home extends Component {
                     </div>
                     {/* {this.getData()} */}
                   </Grid.Column>
+                  <div>{this.state.showUpdate ? this.modalPopUp() : null}</div>
                   {this.state.movies}
                 </Grid.Row>
               </Grid>
