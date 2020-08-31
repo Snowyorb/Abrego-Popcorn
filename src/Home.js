@@ -32,6 +32,7 @@ export default class Home extends Component {
     this.getData = this.getData.bind(this);
     this.delObj = this.delObj.bind(this);
     this.addObj = this.addObj.bind(this);
+    this.saveElements = this.saveElements.bind(this);
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
@@ -62,39 +63,21 @@ export default class Home extends Component {
           key: "c",
           value: "c",
           text: "Completed",
-          image: {
-            avatar: true,
-            src:
-              "https://cdn.iconscout.com/icon/free/png-256/checkmark-1767470-1502540.png",
-          },
         },
         {
           key: "w",
           value: "w",
           text: "Currently Watching",
-          image: {
-            avatar: true,
-            src: "https://static.thenounproject.com/png/2931158-200.png",
-          },
         },
         {
           key: "dr",
           value: "dr",
           text: "Dropped",
-          image: {
-            avatar: true,
-            src:
-              "https://cdn0.iconfinder.com/data/icons/free-daily-icon-set/512/Wrong-512.png",
-          },
         },
         {
           key: "ww",
           value: "ww",
           text: "Want to Watch",
-          image: {
-            avatar: true,
-            src: "https://static.thenounproject.com/png/642123-200.png",
-          },
         },
       ],
     };
@@ -155,7 +138,6 @@ export default class Home extends Component {
     );
     {
       this.handleHide();
-      this.getData();
     }
 
     this.getData();
@@ -187,12 +169,10 @@ export default class Home extends Component {
             <Form.Field
               control={Input}
               inverted="true"
-              onChange={(e) => this.setState({ fixSeriesName: e.target.value })}
+              onChange={(e) => this.setState({ editSeriesName: e.target.value })}
               name="series"
               defaultValue={this.state.editSeriesName}
               placeholder="Enter a series title"
-
-         
             ></Form.Field>
 
             <label>Image Url</label>
@@ -200,11 +180,10 @@ export default class Home extends Component {
             <Form.Field
               control={Input}
               inverted="true"
-              onChange={(e) => this.setState({ fixImageUrl: e.target.value })}
+              onChange={(e) => this.setState({ editImageUrl: e.target.value })}
               name="image"
               defaultValue={this.state.editImageUrl}
               placeholder="Enter a short image url"
-
             ></Form.Field>
 
             <label>Description</label>
@@ -213,7 +192,7 @@ export default class Home extends Component {
               control={TextArea}
               inverted="true"
               onChange={(e) =>
-                this.setState({ fixDescription: e.target.value })
+                this.setState({ editDescription: e.target.value })
               }
               name="description"
               defaultValue={this.state.editDescription}
@@ -232,7 +211,7 @@ export default class Home extends Component {
                 selection
                 options={this.state.watchOpt}
                 onChange={(e) =>
-                  this.setState({ fixStatus: e.target.textContent })
+                  this.setState({ editStatus: e.target.textContent })
                 }
               />
             </Form.Field>
@@ -240,10 +219,19 @@ export default class Home extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions>
-          <Button onClick={() => this.setState({ open: false })} style={{backgroundColor:'pink'}} negative>
+          <Button
+            onClick={() => this.setState({ open: false })}
+            style={{ backgroundColor: "pink" }}
+            negative
+          >
             Cancel
           </Button>
-          <Button type="submit" onClick={this.handleUpdate} style={{backgroundColor:'#d93f87'}} positive>
+          <Button
+            type="submit"
+            onClick={this.handleUpdate}
+            style={{ backgroundColor: "#d93f87" }}
+            positive
+          >
             Update
           </Button>
         </Modal.Actions>
@@ -251,14 +239,14 @@ export default class Home extends Component {
     );
   };
 
-  editObj = (movieId) => {
+  editObj = () => {
     const dataIn = {
       id: this.state.editId,
-      seriesName: this.state.fixSeriesName,
-      imageUrl: this.state.fixImageUrl,
-      description: this.state.fixDescription,
+      seriesName: this.state.editSeriesName,
+      imageUrl: this.state.editImageUrl,
+      description: this.state.editDescription,
       user: this.state.currentUser,
-      status: this.state.fixStatus,
+      status: this.state.editStatus,
     };
 
     fetch(
@@ -275,13 +263,31 @@ export default class Home extends Component {
       .then((data) => {
         console.log("Success:", data);
         console.log(dataIn);
+        console.log("!!!!?? YOU COMING?")
         this.getData();
       })
       .catch((error) => {
         console.error("Error:", error);
       });
 
-    console.log(movieId);
+    console.log(this.state.editId + " ID GETTING IN");
+  };
+
+  saveElements = (series, description, image, status, id) => {
+    this.setState({showUpdate : true})
+    this.setState({open : true})
+    this.setState({ editSeriesName: series });
+    this.setState({ editDescription: description });
+    this.setState({ editImageUrl: image });
+    this.setState({ editStatus: status });
+    this.setState({editId: id})
+    {
+      this.editObj();
+    }
+    {
+      this.getData();
+    }
+    
   };
 
   getData() {
@@ -316,9 +322,14 @@ export default class Home extends Component {
                         />
                         <div className="colorOver">
                           <div class="overlay">
-                            <h4 className="ser">{show.seriesName}</h4>
+                            <br />
+                            <br />
                             <div>
-                              <h3 style={{ color: "#faff72" }}>Status</h3>
+                              <h3
+                                style={{ color: "#faff72", fontSize: "20px" }}
+                              >
+                                Status
+                              </h3>
                             </div>
                             <Dropdown
                               defaultValue
@@ -355,19 +366,17 @@ export default class Home extends Component {
                                 trigger={
                                   <Button
                                     onClick={() =>
-                                      this.setState({
-                                        showUpdate: true,
-                                        open: true,
-                                        editId: show.id,
-                                        editSeriesName: show.seriesName,
-                                        editDescription: show.description,
-                                        editImageUrl: show.imageUrl,
-                                        editStatus: show.status,
-                                      })
+                                      this.saveElements(
+                                        show.seriesName,
+                                        show.description,
+                                        show.imageUrl,
+                                        show.status,
+                                        show.id
+                                      )
                                     }
                                     style={{
-                                      backgroundColor: "#faff72",
-                                      color: "black",
+                                      backgroundColor: "#E6438F",
+                                      color: "white",
                                     }}
                                     icon="edit outline"
                                   />
@@ -394,9 +403,14 @@ export default class Home extends Component {
                         />
                         <div className="colorOver">
                           <div class="overlay">
-                            <h4 className="ser">{show.seriesName}</h4>
+                            <br />
+                            <br />
                             <div>
-                              <h3 style={{ color: "#faff72" }}>Status</h3>
+                              <h3
+                                style={{ color: "#faff72", fontSize: "20px" }}
+                              >
+                                Status
+                              </h3>
                             </div>
                             <Dropdown
                               placeholder={show.status}
@@ -432,19 +446,17 @@ export default class Home extends Component {
                                 trigger={
                                   <Button
                                     onClick={() =>
-                                      this.setState({
-                                        showUpdate: true,
-                                        open: true,
-                                        editId: show.id,
-                                        editSeriesName: show.seriesName,
-                                        editDescription: show.description,
-                                        editImageUrl: show.imageUrl,
-                                        editStatus: show.status,
-                                      })
+                                      this.saveElements(
+                                        show.seriesName,
+                                        show.description,
+                                        show.imageUrl,
+                                        show.status,
+                                        show.id
+                                      )
                                     }
                                     style={{
-                                      backgroundColor: "#faff72",
-                                      color: "black",
+                                      backgroundColor: "#E6438F",
+                                      color: "white",
                                     }}
                                     icon="edit outline"
                                   />
@@ -481,13 +493,23 @@ export default class Home extends Component {
 
   handleUpdate = () => {
     this.setState({ open: false });
-    // this.setState({ fixImageUrl: this.state.fixImageUrl });
-    // this.setState({ fixDescription: this.state.fixDescription });
-    // this.setState({ fixStatus: this.state.fixStatus });
-    // this.setState({ fixSeriesName: this.state.fixSeriesName });
-    {
+    // this.setState({ fixImageUrl: this.state.editImageUrl });
+    // this.setState({ fixSeriesName: this.state.editSeriesName });
+    // this.setState({ fixDescription: this.state.editDescription });
+    // this.setState({ fixStatus: this.state.editStatus });
+
+
+
+     console.log("EMPTY? : " + this.state.fixSeriesName + " " + this.state.fixStatus + " " + this.state.fixImageUrl + " "+ this.state.fixDescription)
+     console.log("EDIT? : " + this.state.editSeriesName + " " + this.state.editStatus + " " + this.state.editImageUrl + " "+ this.state.editDescription)
+
+    // if(this.state.fixImageUrl === ""){this.setState({fixImageUrl: this.state.editImageUrl}); console.log(this.state.fixImageUrl +" afsfasf" + this.state.editImageUrl)}
+    // if(this.state.fixSeriesName === ""){this.setState({fixImageUrl: this.state.editSeriesName})}
+    // if(this.state.fixDescription === ""){this.setState({fixImageUrl: this.state.editDescription})}
+    // if(this.state.fixStatus === ""){this.setState({fixImageUrl: this.state.editStatus})}
+    // {
       this.editObj();
-    }
+    // }
     {
       this.getData();
     }
@@ -615,7 +637,11 @@ export default class Home extends Component {
     const { active } = this.state;
     return (
       <Dimmer.Dimmable dimmed={active}>
-        <Dimmer active={active} onClickOutside={this.handleHide} verticalAlign='top'>
+        <Dimmer
+          active={active}
+          onClickOutside={this.handleHide}
+          verticalAlign="top"
+        >
           <Header as="h2" icon inverted>
             <Icon name="tv" />
             Add a Show

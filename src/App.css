@@ -21,7 +21,11 @@ body {
 
 .home-page {
   background: #13032a;
+  background-image: url('https://ipack.info/wp-content/uploads/2015/10/vlcsnap-00138.jpg');
+
 }
+
+
 
 .login-page {
   background-image: url("https://wallpapercave.com/wp/wp2863967.gif");
@@ -30,6 +34,27 @@ body {
 
 .register-page {
   background-image: url("https://wallpapercave.com/wp/wp2863967.gif");
+}
+
+.visible menu transition{
+  background-color: antiquewhite !important;
+}
+
+img{
+  /* border-bottom-style:  solid !important;
+  border-bottom-color: white !important;
+  border-top-color: white !important;
+  border-top-style: solid !important;
+  border-right-style: dotted !important;
+  border-right-color: yellow !important;
+  border-left-style: dotted !important;
+  border-left-color: yellow !important;
+  border-left-width: 7px;
+  border-right-width: 7px;
+  border-top-width: 6px;
+  border-bottom-width: 6px; */
+  border: 10px solid transparent !important;
+  border-image: url('https://img2.pngio.com/library-of-theatre-lights-border-graphic-free-png-files-theatre-borders-png-2400_2390.png') 180 round !important;
 }
 
 #title {
@@ -72,7 +97,7 @@ body {
 @import url("https://fonts.googleapis.com/css2?family=Raleway&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Raleway&family=Sacramento&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Damion&family=Raleway&family=Sacramento&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=BenchNine:wght@700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=BenchNine:wght@700&display=swap");
 
 .url-link {
   color: #ffff;
@@ -81,7 +106,7 @@ body {
   text-decoration: underline;
 }
 
-.ser{
+.ser {
   color: #fff;
   font-style: italic;
   font-weight: 700;
@@ -237,7 +262,6 @@ header {
   100% {
     color: #faff72;
   }
-  
 }
 
 #t:hover {
@@ -245,16 +269,16 @@ header {
   color: #faff72;
 }
 
-
 .movieStack {
   display: table;
-  width: 100%; 
-  table-layout: fixed; 
-  border-spacing: 10px; 
+  width: 100%;
+  table-layout: fixed;
+  border-spacing: 10px;
 }
 
 #dropStyle {
   color: #000;
+  background-color: aliceblue;
 }
 
 #gridBoi {
@@ -323,21 +347,21 @@ label:hover ~ label {
   width: 50%;
 }
 
-.rad{
+.rad {
   color: #fff;
   margin-right: 10px;
   font-size: 23px;
-  font-family: 'BenchNine', sans-serif;
+  font-family: "BenchNine", sans-serif;
 }
 
-.border{
+.border {
   border-style: double;
   border-color: #fff;
   width: 50px;
   height: 50px;
 }
 
-.radTitle{
+.radTitle {
   color: #faff72;
   font-size: 20px;
   margin-top: 20px;
@@ -346,6 +370,7 @@ label:hover ~ label {
 
 img {
   height: 368px;
+  
 }
 
 .overlay {
@@ -353,7 +378,7 @@ img {
   bottom: 100%;
   left: 0;
   right: 0;
-  background-color: rgba(217, 63, 135, 0.76);
+  background-color: rgba(83, 63, 135, 0.76);
 
   overflow: hidden;
   width: 200%;
@@ -361,8 +386,17 @@ img {
   transition: 0.5s ease;
 }
 
+#addle{
+  border: none;
+  border-style: none !important;
+}
+
 #addle:hover {
-  border: 5px dotted #fff;
+  border-bottom: 5px dotted #fff !important;
+  border-top: 5px dotted #fff !important;
+  border-right: 5px dotted #fff !important;
+  border-left: 5px dotted #fff !important;
+
 }
 
 .overlayClone {
@@ -402,22 +436,6 @@ img {
   height: 100%;
 }
 
-/* .text {
-  color: white;
-  font-size: 20px;
-  position: absolute;
-  top: 50%;
-  font-weight: bold;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  text-align: center;
-  height: 293px;
-  width: 219px;
-  font-size: 16px;
-  margin-top: 16px;
-} */
 
 .review-text {
   height: 100px;
@@ -484,7 +502,7 @@ label:hover ~ input:checked ~ label {
   #gridBoi {
     margin-left: 13% !important;
   }
-  .radTitle{
+  .radTitle {
     margin-top: 71px;
   }
 }
