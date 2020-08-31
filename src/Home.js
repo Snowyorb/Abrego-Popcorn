@@ -223,7 +223,7 @@ export default class Home extends Component {
               // id="des-show"
             ></Form.Field>
             <Form.Field name="status">
-              <label>{this.state.editStatus}</label>
+              <label>Status</label>
               <Dropdown
                 placeholder="Status"
                 placeholder={this.state.editStatus}
@@ -240,10 +240,10 @@ export default class Home extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions>
-          <Button onClick={() => this.setState({ open: false })} negative>
+          <Button onClick={() => this.setState({ open: false })} style={{backgroundColor:'pink'}} negative>
             Cancel
           </Button>
-          <Button type="submit" onClick={this.handleUpdate} positive>
+          <Button type="submit" onClick={this.handleUpdate} style={{backgroundColor:'#d93f87'}} positive>
             Update
           </Button>
         </Modal.Actions>
@@ -615,7 +615,7 @@ export default class Home extends Component {
     const { active } = this.state;
     return (
       <Dimmer.Dimmable dimmed={active}>
-        <Dimmer active={active} onClickOutside={this.handleHide}>
+        <Dimmer active={active} onClickOutside={this.handleHide} verticalAlign='top'>
           <Header as="h2" icon inverted>
             <Icon name="tv" />
             Add a Show
@@ -683,7 +683,7 @@ export default class Home extends Component {
             </Link>
           </header>
 
-          <button
+          {/* <button
             type="button"
             onClick={() =>
               this.setState({ activeRadio: !this.state.activeRadio })
@@ -691,7 +691,7 @@ export default class Home extends Component {
           >
             Filter
           </button>
-          {this.sideRadio()}
+          {this.sideRadio()} */}
           <div id="movieStack">
             <div class="movieBlock">
               <Grid
