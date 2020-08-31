@@ -262,7 +262,7 @@ export default class Home extends Component {
     };
 
     fetch(
-      `https://lwtuvh36nl.execute-api.us-east-2.amazonaws.com/pop/findseries/${movieId}`,
+      `https://lwtuvh36nl.execute-api.us-east-2.amazonaws.com/pop/findseries/${this.state.editId}`,
       {
         method: "put",
         body: JSON.stringify(dataIn),
