@@ -399,6 +399,12 @@ img {
 
 }
 
+.ui.dimmer{
+  background-color: rgba(120, 63, 135, 0.62) !important;
+}
+
+/*  */
+
 .overlayClone {
   position: absolute;
   bottom: 100%;

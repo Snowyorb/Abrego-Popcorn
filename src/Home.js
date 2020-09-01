@@ -15,6 +15,7 @@ import {
   Form,
   TextArea,
   Radio,
+  Sticky,
   Sidebar,
   Menu,
   Modal,
@@ -342,7 +343,11 @@ export default class Home extends Component {
                               options={this.state.watchOpt}
                               id="dropStyle"
                             />
-
+                             <h3
+                                style={{ color: "#faff72", fontSize: "20px", marginBottom: "-2px" }}
+                              >
+                                Status
+                              </h3>
                             <p className="desc">{show.description}</p>
                             <Button.Group icon>
                               <Popup
@@ -407,7 +412,7 @@ export default class Home extends Component {
                             <br />
                             <div>
                               <h3
-                                style={{ color: "#faff72", fontSize: "20px" }}
+                                style={{ color: "#faff72", fontSize: "20px", marginBottom: "-2px" }}
                               >
                                 Status
                               </h3>
@@ -423,7 +428,11 @@ export default class Home extends Component {
                               options={this.state.watchOpt}
                               id="dropStyle"
                             />
-
+                             <h3
+                                style={{ color: "#faff72", fontSize: "20px" }}
+                              >
+                                Description
+                              </h3>
                             <p className="desc">{show.description}</p>
                             <Button.Group icon>
                               <Popup
@@ -642,6 +651,7 @@ export default class Home extends Component {
           onClickOutside={this.handleHide}
           verticalAlign="top"
         >
+    
           <Header as="h2" icon inverted>
             <Icon name="tv" />
             Add a Show
@@ -692,11 +702,14 @@ export default class Home extends Component {
             </Form.Field>
             <Form.Button type="submit">Submit</Form.Button>
           </Form>
+       
         </Dimmer>
+         
         <Form></Form>
         <div className="home-display" id="homeBody">
           <title>Popcorn - Home</title>
           <BodyClassName className="home-page" />
+        
           <header>
             <h1 className="popcorn" id="t">
               Popcorn
@@ -708,7 +721,7 @@ export default class Home extends Component {
               </a>
             </Link>
           </header>
-
+              
           {/* <button
             type="button"
             onClick={() =>
@@ -759,6 +772,7 @@ export default class Home extends Component {
           </div>
         </div>
       </Dimmer.Dimmable>
+      
     );
   }
 }
